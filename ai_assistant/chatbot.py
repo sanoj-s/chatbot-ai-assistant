@@ -34,16 +34,14 @@ def handle_input():
         # Build the conversation history for the model
         chat_history = [("system", "You are a helpful assistant. Please respond to the questions.")]
         for role, message in st.session_state.conversation_history:
-            if role == "user":
-                chat_history.append(("user", f"Question:{message}"))
-            elif role == "assistant":
-                chat_history.append(("assistant", message))
-
-        # Create a prompt from the history
-        modified_prompt = ChatPromptTemplate.from_messages(chat_history)
-        modified_chain = modified_prompt | llm
+            if role in ["user", "assistant"]:  # Make sure only valid roles are added
+                chat_history.append((role, message))
 
         try:
+            # Create a prompt from the history (this is where the error happens)
+            modified_prompt = ChatPromptTemplate.from_messages(chat_history)
+            modified_chain = modified_prompt | llm
+
             # Get the model response
             response = modified_chain.invoke({"question": input_text})
             content = getattr(response, "content", None) or response.get("content", None)
