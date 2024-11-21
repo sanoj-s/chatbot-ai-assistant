@@ -38,14 +38,6 @@ st.markdown(
         background-color: #3a4e5c;  /* Slightly lighter dark background when focused */
         outline: none;  /* Remove focus outline */
     }
-
-    /* For Dark Theme: */
-    .st-dark .stMarkdown span.you {
-        color: #66b3ff;  /* Light blue for User messages */
-    }
-    .st-dark .stMarkdown span.bot {
-        color: #98fb98;  /* Light green for Bot messages */
-    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -113,7 +105,7 @@ if st.session_state.conversation_history:
         conversation_pairs.append((user_message, bot_message))
 
     for user_message, bot_message in reversed(conversation_pairs):
-        # Display "You" with color (light blue)
-        st.markdown(f"<span class='you'>**You:** {user_message}</span>", unsafe_allow_html=True)
-        # Display "Bot" with color (light green)
-        st.markdown(f"<span class='bot'>**Bot:** {bot_message}</span>", unsafe_allow_html=True)
+        # Display "You" with color
+        st.markdown(f"<span style='color:blue;'>**You:** {user_message}</span>", unsafe_allow_html=True)
+        # Display "Bot" with color
+        st.markdown(f"<span style='color:green;'>**Bot:** {bot_message}</span>", unsafe_allow_html=True)
