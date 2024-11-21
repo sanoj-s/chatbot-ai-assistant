@@ -3,8 +3,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 import streamlit as st
 
-os.environ[
-    'OPENAI_API_KEY'] = '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'
+os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 
 # Define the chat prompt template here
 prompt = ChatPromptTemplate.from_messages(
