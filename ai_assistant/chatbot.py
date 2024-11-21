@@ -23,12 +23,20 @@ st.markdown(
         border-radius: 5px;  /* Rounded corners */
         padding: 10px;
     }
+    .stTextInput input:focus {
+        background-color: #e0f7ff;  /* Light blue background when focused */
+        outline: none;  /* Remove focus outline */
+    }
     .st-dark .stTextInput input {
         background-color: #1e1e1e;  /* Dark background for dark theme */
         color: #d3d3d3;  /* Light gray text for better contrast in dark theme */
         border: none;  /* Remove border */
         border-radius: 5px;  /* Rounded corners */
         padding: 10px;
+    }
+    .st-dark .stTextInput input:focus {
+        background-color: #3a4e5c;  /* Slightly lighter dark background when focused */
+        outline: none;  /* Remove focus outline */
     }
     </style>
     """,
