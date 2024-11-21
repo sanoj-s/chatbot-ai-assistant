@@ -15,21 +15,17 @@ prompt = ChatPromptTemplate.from_messages(
 st.logo("./bot.png")
 st.title("I'm here to help you...")
 
-# Inject custom CSS to highlight the input field
+# Inject JavaScript to focus the input field when the page loads
 st.markdown(
     """
-    <style>
-    .stTextInput input {
-        background-color: #f0f8ff;  /* Light blue background */
-        border: 2px solid #007bff;  /* Blue border */
-        border-radius: 5px;
-        padding: 10px;
-    }
-    .stTextInput input:focus {
-        background-color: #ffebcd;  /* Light peach background when focused */
-        box-shadow: 0 0 5px 2px rgba(0, 123, 255, 0.5); /* Focus shadow */
-    }
-    </style>
+    <script>
+    window.onload = function() {
+        const inputElement = document.querySelector('input[type="text"]');
+        if (inputElement) {
+            inputElement.focus();  // Focus the input field when the page loads
+        }
+    };
+    </script>
     """,
     unsafe_allow_html=True,
 )
