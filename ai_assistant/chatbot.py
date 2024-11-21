@@ -64,9 +64,16 @@ st.text_input(
     on_change=handle_input,
 )
 
-# Display the conversation in reverse order (latest at the top)
-for role, message in reversed(st.session_state.conversation_history):
-    if role == "user":
-        st.write(f"**You:** {message}")
-    elif role == "assistant":
-        st.write(f"**Bot:** {message}")
+# Display the conversation in reverse order, grouping "You" and "Bot" together
+if st.session_state.conversation_history:
+    # Grouping "You" and "Bot" messages
+    conversation_pairs = []
+    for i in range(0, len(st.session_state.conversation_history), 2):
+        user_message = st.session_state.conversation_history[i][1] if i < len(st.session_state.conversation_history) else ""
+        bot_message = st.session_state.conversation_history[i + 1][1] if i + 1 < len(st.session_state.conversation_history) else ""
+        conversation_pairs.append((user_message, bot_message))
+
+    # Display the pairs in reverse order (latest at the top)
+    for user_message, bot_message in reversed(conversation_pairs):
+        st.write(f"**You:** {user_message}")
+        st.write(f"**Bot:** {bot_message}")
