@@ -9,7 +9,7 @@ config.read('../config.ini')
 
 openai_api_key_value = config.get('keys_value', 'openai_api_key')
 os.environ[
-    'OPENAI_API_KEY'] = openai_api_key_value
+    'OPENAI_API_KEY'] = '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'
 
 # Define the chat prompt template
 prompt = ChatPromptTemplate.from_messages(
