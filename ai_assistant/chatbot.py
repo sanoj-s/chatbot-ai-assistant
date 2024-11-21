@@ -12,7 +12,9 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-st.logo("./bot.png")
+st.markdown(
+    "<img src='./bot.png' width='150' height='150'>", unsafe_allow_html=True
+)
 st.title("I'm here to help you...")
 
 # Initialize the model
