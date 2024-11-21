@@ -6,10 +6,12 @@ import streamlit as st
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 
 # Define the chat prompt template
-# Base prompt for the assistant
-base_prompt = [("system", "You are a helpful assistant. Please respond to the questions.")]
+prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", "You are a helpful assistant. Please respond to the questions."),
+    ]
+)
 
-# Initialize Streamlit app
 st.title("Your Bot is here...")
 
 # Initialize the model
@@ -22,52 +24,54 @@ if "conversation_history" not in st.session_state:
 if "input_text" not in st.session_state:
     st.session_state.input_text = ""
 
-# Define a callback to handle user input
+# Define a callback to handle input
 def handle_input():
     input_text = st.session_state.input_text.strip()
     if input_text:
-        # Append the user input to the conversation history
+        # Add the user's input to conversation history
         st.session_state.conversation_history.append(("user", input_text))
 
-        # Prepare the chat history for LangChain
-        chat_history = base_prompt + [
-            (role, f"Question:{message}" if role == "user" else message)
-            for role, message in st.session_state.conversation_history
-        ]
+        # Build the conversation history for the model
+        chat_history = [("system", "You are a helpful assistant. Please respond to the questions.")]
+        for role, message in st.session_state.conversation_history:
+            if role == "user":
+                chat_history.append(("user", f"Question:{message}"))
+            elif role == "assistant":
+                chat_history.append(("assistant", message))
 
-        # Generate a new prompt
+        # Create a prompt from the history
+        modified_prompt = ChatPromptTemplate.from_messages(chat_history)
+        modified_chain = modified_prompt | llm
+
         try:
-            modified_prompt = ChatPromptTemplate.from_messages(chat_history)
-            response = modified_prompt | llm
+            # Get the model response
+            response = modified_chain.invoke({"question": input_text})
             content = getattr(response, "content", None) or response.get("content", None)
-
-            # Append the bot's response to the conversation history
-            st.session_state.conversation_history.append(("assistant", content or "No valid response received."))
+            if content:
+                st.session_state.conversation_history.append(("assistant", content))
+            else:
+                st.session_state.conversation_history.append(("assistant", "No valid response received."))
         except Exception as e:
             st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
 
         # Clear the input field
         st.session_state.input_text = ""
 
-# Input field with callback
+# Create the input field with the callback
 st.text_input(
     "Ask your question!",
     key="input_text",
     on_change=handle_input,
 )
 
-# Display conversation history
+# Group conversation pairs and display latest first
 if st.session_state.conversation_history:
-    # Group user and assistant messages for display
-    conversation_pairs = [
-        (
-            st.session_state.conversation_history[i][1],
-            st.session_state.conversation_history[i + 1][1] if i + 1 < len(st.session_state.conversation_history) else "",
-        )
-        for i in range(0, len(st.session_state.conversation_history), 2)
-    ]
+    conversation_pairs = []
+    for i in range(0, len(st.session_state.conversation_history), 2):
+        user_message = st.session_state.conversation_history[i][1] if i < len(st.session_state.conversation_history) else ""
+        bot_message = st.session_state.conversation_history[i + 1][1] if i + 1 < len(st.session_state.conversation_history) else ""
+        conversation_pairs.append((user_message, bot_message))
 
-    # Display the latest conversation at the top
     for user_message, bot_message in reversed(conversation_pairs):
         st.write(f"**You:** {user_message}")
         st.write(f"**Bot:** {bot_message}")
