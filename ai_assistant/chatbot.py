@@ -78,6 +78,6 @@ if st.session_state.conversation_history:
 
     for user_message, bot_message in reversed(conversation_pairs):
         # Display "You" with icon and color
-        st.markdown(f"<span style='color:blue;'><img src='/chatbot-ai-assistant/{user_icon_path}' width='20' height='20'> **You:** {user_message}</span>", unsafe_allow_html=True)
+        st.markdown(f"<span style='color:blue;'><img src='../{user_icon_path}' width='20' height='20'> **You:** {user_message}</span>", unsafe_allow_html=True)
         # Display "Bot" with icon and color
-        st.markdown(f"<span style='color:green;'><img src='/chatbot-ai-assistant/{bot_icon_path}' width='20' height='20'> **Bot:** {bot_message}</span>", unsafe_allow_html=True)
+        st.markdown(f"<span style='color:green;'><img src='../{bot_icon_path}' width='20' height='20'> **Bot:** {bot_message}</span>", unsafe_allow_html=True)
