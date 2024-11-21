@@ -25,10 +25,6 @@ st.markdown(
         border-radius: 5px;
         padding: 10px;
     }
-    .stTextInput input:focus {
-        background-color: #ffebcd;  /* Light peach background when focused */
-        box-shadow: 0 0 5px 2px rgba(0, 123, 255, 0.5); /* Focus shadow */
-    }
     </style>
     """,
     unsafe_allow_html=True,
