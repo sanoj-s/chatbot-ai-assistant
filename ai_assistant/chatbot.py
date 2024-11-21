@@ -31,17 +31,15 @@ def handle_input():
         # Append the user input to the conversation history
         st.session_state.conversation_history.append(("user", input_text))
 
-        # Build the chat history for LangChain
+        # Prepare the chat history for LangChain
         chat_history = base_prompt + [
             (role, f"Question:{message}" if role == "user" else message)
             for role, message in st.session_state.conversation_history
         ]
 
         # Generate a new prompt
-        modified_prompt = ChatPromptTemplate.from_messages(chat_history)
-
         try:
-            # Pass the prompt to the model
+            modified_prompt = ChatPromptTemplate.from_messages(chat_history)
             response = modified_prompt | llm
             content = getattr(response, "content", None) or response.get("content", None)
 
