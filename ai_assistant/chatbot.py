@@ -34,11 +34,13 @@ def handle_input():
         # Build the conversation history for the model
         chat_history = [("system", "You are a helpful assistant. Please respond to the questions.")]
         for role, message in st.session_state.conversation_history:
-            if role in ["user", "assistant"]:  # Make sure only valid roles are added
-                chat_history.append((role, message))
+            if role in ["user", "assistant"]:  # Ensure only valid roles
+                # Escape curly braces in the message to prevent them from being interpreted as placeholders
+                escaped_message = message.replace("{", "{{").replace("}", "}}")
+                chat_history.append((role, escaped_message))
 
         try:
-            # Create a prompt from the history (this is where the error happens)
+            # Create a prompt from the history
             modified_prompt = ChatPromptTemplate.from_messages(chat_history)
             modified_chain = modified_prompt | llm
 
