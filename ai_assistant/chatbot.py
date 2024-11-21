@@ -73,5 +73,7 @@ if st.session_state.conversation_history:
         conversation_pairs.append((user_message, bot_message))
 
     for user_message, bot_message in reversed(conversation_pairs):
-        st.write(f"**You:** {user_message}")
-        st.write(f"**Bot:** {bot_message}")
+        # Display "You" with color
+        st.markdown(f"<span style='color:blue;'>**You:** {user_message}</span>", unsafe_allow_html=True)
+        # Display "Bot" with color
+        st.markdown(f"<span style='color:green;'>**Bot:** {bot_message}</span>", unsafe_allow_html=True)
