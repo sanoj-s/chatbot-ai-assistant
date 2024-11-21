@@ -5,7 +5,7 @@ import streamlit as st
 
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 
-st.set_page_config(page_title="Chatbot", layout="wide", initial_sidebar_state="auto", theme="dark")
+st.set_page_config(theme="dark")
 
 # Define the chat prompt template
 prompt = ChatPromptTemplate.from_messages(
