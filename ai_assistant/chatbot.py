@@ -34,21 +34,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Inject JavaScript to focus the input field when the page loads
-st.markdown(
-    """
-    <script>
-    window.onload = function() {
-        const inputElement = document.querySelector('input[type="text"]');
-        if (inputElement) {
-            inputElement.focus();  // Focus the input field when the page loads
-        }
-    };
-    </script>
-    """,
-    unsafe_allow_html=True,
-)
-
 # Initialize the model
 llm = ChatOpenAI(model="gpt-3.5-turbo")
 
