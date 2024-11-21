@@ -25,6 +25,9 @@ st.markdown(
         border-radius: 5px;
         padding: 10px;
     }
+    .stTextInput input:focus {
+        border: 2px solid #00bfff;  /* Lighter blue border on focus */
+    }
     </style>
     """,
     unsafe_allow_html=True,
