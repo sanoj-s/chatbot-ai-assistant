@@ -18,21 +18,15 @@ st.markdown(
     <style>
     .stTextInput input {
         background-color: #f0f8ff;  /* Light blue background */
-        border: 2px solid #007bff;  /* Blue border */
-        border-radius: 5px;
+        border: none;  /* Remove the border */
+        border-radius: 5px;  /* Rounded corners */
         padding: 10px;
         color: #000;  /* Black text for light themes */
-    }
-    .stTextInput input:focus {
-        outline: none;  /* Remove focus outline */
     }
     .st-dark .stTextInput input {
         background-color: #1e1e1e;  /* Dark background for dark theme */
         color: #fff;  /* White text for contrast */
-        border: 2px solid #007bff;  /* Blue border */
-    }
-    .st-dark .stTextInput input:focus {
-        outline: none;  /* Remove focus outline */
+        border: none;  /* Remove the border */
     }
     </style>
     """,
