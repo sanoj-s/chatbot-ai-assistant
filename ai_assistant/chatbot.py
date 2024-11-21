@@ -4,7 +4,7 @@ from langchain_openai import ChatOpenAI
 import streamlit as st
 
 os.environ[
-    'OPENAI_API_KEY'] = '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'
+    'OPENAI_API_KEY'] = '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'
 
 # Define the chat prompt template here
 prompt = ChatPromptTemplate.from_messages(
