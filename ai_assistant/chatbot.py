@@ -23,7 +23,8 @@ st.markdown(
         border-radius: 5px;  /* Rounded corners */
         padding: 10px;
     }
-    .stTextInput input:focus {
+    .stTextInput input:focus,
+    .stTextInput input.initial-focus {  /* Add initial-focus class to simulate focus on load */
         background-color: #e0f7ff;  /* Light blue background when focused */
         outline: none;  /* Remove focus outline */
     }
@@ -34,7 +35,8 @@ st.markdown(
         border-radius: 5px;  /* Rounded corners */
         padding: 10px;
     }
-    .st-dark .stTextInput input:focus {
+    .st-dark .stTextInput input:focus,
+    .st-dark .stTextInput input.initial-focus {
         background-color: #3a4e5c;  /* Slightly lighter dark background when focused */
         outline: none;  /* Remove focus outline */
     }
@@ -42,6 +44,25 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+# To simulate the "focus" state immediately on load
+st.text_input(
+    "Ask your question!",
+    key="input_text",
+    on_change=handle_input,
+    help="This field is highlighted on load",
+    placeholder="Ask your question here..."
+)
+
+# Add initial-focus class to trigger highlight on load using JavaScript (below):
+st.markdown("""
+    <script>
+    window.onload = function() {
+        // Add the 'initial-focus' class to the input field on page load
+        document.querySelector('.stTextInput input').classList.add('initial-focus');
+    }
+    </script>
+    """, unsafe_allow_html=True)
 
 st.logo("./bot.png")
 st.title("I'm here to help you...")
