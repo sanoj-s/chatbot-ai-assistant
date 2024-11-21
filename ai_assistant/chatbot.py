@@ -25,7 +25,6 @@ st.markdown(
     }
     .stTextInput input:focus {
         outline: none;  /* Remove focus outline */
-        border: 2px solid #007bff;  /* Keep the original border color */
     }
     .st-dark .stTextInput input {
         background-color: #1e1e1e;  /* Dark background for dark theme */
@@ -34,7 +33,6 @@ st.markdown(
     }
     .st-dark .stTextInput input:focus {
         outline: none;  /* Remove focus outline */
-        border: 2px solid #007bff;  /* Keep the original border color */
     }
     </style>
     """,
