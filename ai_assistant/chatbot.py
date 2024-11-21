@@ -12,7 +12,7 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-st.title("Your Bot is here...")
+st.title("I'm here to help you...")
 
 # Initialize the model
 llm = ChatOpenAI(model="gpt-3.5-turbo")
