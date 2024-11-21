@@ -44,6 +44,7 @@ st.markdown(
 )
 
 st.logo("./bot.png")
+st.markdown("FixForward")
 st.title("I'm here to help you...")
 
 # Initialize the model
