@@ -15,6 +15,25 @@ prompt = ChatPromptTemplate.from_messages(
 st.logo("./bot.png")
 st.title("I'm here to help you...")
 
+# Inject custom CSS to highlight the input field
+st.markdown(
+    """
+    <style>
+    .stTextInput input {
+        background-color: #f0f8ff;  /* Light blue background */
+        border: 2px solid #007bff;  /* Blue border */
+        border-radius: 5px;
+        padding: 10px;
+    }
+    .stTextInput input:focus {
+        background-color: #ffebcd;  /* Light peach background when focused */
+        box-shadow: 0 0 5px 2px rgba(0, 123, 255, 0.5); /* Focus shadow */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # Initialize the model
 llm = ChatOpenAI(model="gpt-3.5-turbo")
 
