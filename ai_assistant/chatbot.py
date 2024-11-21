@@ -13,7 +13,7 @@ prompt = ChatPromptTemplate.from_messages(
 )
 
 st.markdown(
-    "<img src='../bot.png' width='150' height='150'>", unsafe_allow_html=True
+    "<img src='.../bot.png' width='150' height='150'>", unsafe_allow_html=True
 )
 st.title("I'm here to help you...")
 
