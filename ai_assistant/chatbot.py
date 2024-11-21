@@ -15,13 +15,15 @@ prompt = ChatPromptTemplate.from_messages(
 # Define the background color for the edit field
 st.markdown(
     """
-    <style>
+   <style>
     .stTextInput input {
         background-color: #f0f8ff;  /* Light blue background */
-        border: none;  /* Remove the border */
-        border-radius: 5px;  /* Rounded corners */
+        border: 2px solid #007bff;  /* Blue border */
+        border-radius: 5px;
         padding: 10px;
-        color: #000;  /* Black text for light themes */
+    }
+    .stTextInput input:focus {
+        border: none;  /* No border on focus */
     }
     .st-dark .stTextInput input {
         background-color: #1e1e1e;  /* Dark background for dark theme */
