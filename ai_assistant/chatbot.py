@@ -11,7 +11,7 @@ prompt = ChatPromptTemplate.from_messages(
         ("system", "You are a helpful assistant. Please respond to the questions."),
     ]
 )
-st.logo("../bot.png")
+st.logo("./bot.png")
 st.title("I'm here to help you...")
 
 # Initialize the model
