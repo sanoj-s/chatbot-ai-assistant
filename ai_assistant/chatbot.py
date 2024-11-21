@@ -13,7 +13,7 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-st.title("I am here to help you...")
+st.title("Your Bot is here...")
 
 # Initialize the model
 llm = ChatOpenAI(model="gpt-3.5-turbo")
@@ -64,8 +64,8 @@ st.text_input(
     on_change=handle_input,
 )
 
-# Display the conversation
-for role, message in st.session_state.conversation_history:
+# Display the conversation in reverse order (latest at the top)
+for role, message in reversed(st.session_state.conversation_history):
     if role == "user":
         st.write(f"**You:** {message}")
     elif role == "assistant":
