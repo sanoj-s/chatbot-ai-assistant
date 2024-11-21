@@ -6,13 +6,11 @@ import streamlit as st
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 
 # Define the chat prompt template
-prompt = ChatPromptTemplate.from_messages(
-    [
-        ("system", "You are a helpful assistant. Please respond to the questions."),
-    ]
-)
+# Base prompt for the assistant
+base_prompt = [("system", "You are a helpful assistant. Please respond to the questions.")]
 
-st.title("I'm here to help you...")
+# Initialize Streamlit app
+st.title("Your Bot is here...")
 
 # Initialize the model
 llm = ChatOpenAI(model="gpt-3.5-turbo")
