@@ -6,7 +6,7 @@ import streamlit as st
 os.environ[
     'OPENAI_API_KEY'] = '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'
 
-# Define the chat prompt template
+# Define the chat prompt template here
 prompt = ChatPromptTemplate.from_messages(
     [
         ("system", "You are a helpful assistant. Please respond to the questions."),
