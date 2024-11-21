@@ -11,7 +11,7 @@ prompt = ChatPromptTemplate.from_messages(
         ("system", "You are a helpful assistant. Please respond to the questions."),
     ]
 )
-st.logo("./bot.png")
+
 st.title("I'm here to help you...")
 
 # Initialize the model
@@ -23,6 +23,10 @@ if "conversation_history" not in st.session_state:
 
 if "input_text" not in st.session_state:
     st.session_state.input_text = ""
+
+# Relative paths for the locally stored icons
+user_icon_path = "./user.png"  # Local path for user icon
+bot_icon_path = "./bot.png"    # Local path for bot icon
 
 # Define a callback to handle input
 def handle_input():
@@ -73,7 +77,7 @@ if st.session_state.conversation_history:
         conversation_pairs.append((user_message, bot_message))
 
     for user_message, bot_message in reversed(conversation_pairs):
-        # Display "You" with color
-        st.markdown(f"<span style='color:blue;'>**You:** {user_message}</span>", unsafe_allow_html=True)
-        # Display "Bot" with color
-        st.markdown(f"<span style='color:green;'>**Bot:** {bot_message}</span>", unsafe_allow_html=True)
+        # Display "You" with icon and color
+        st.markdown(f"<span style='color:blue;'><img src='/chatbot-ai-assistant/{user_icon_path}' width='20' height='20'> **You:** {user_message}</span>", unsafe_allow_html=True)
+        # Display "Bot" with icon and color
+        st.markdown(f"<span style='color:green;'><img src='/chatbot-ai-assistant/{bot_icon_path}' width='20' height='20'> **Bot:** {bot_message}</span>", unsafe_allow_html=True)
