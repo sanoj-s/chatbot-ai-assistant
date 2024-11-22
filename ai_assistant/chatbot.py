@@ -98,7 +98,6 @@ st.text_input(
     "",
     key="input_text",
     on_change=handle_input,
-    max_chars=500,  # Optional, sets the max characters limit for the input
     placeholder="How can I help you today?",
 )
 
