@@ -16,34 +16,37 @@ prompt = ChatPromptTemplate.from_messages(
 st.markdown(
     """
     <style>
-    .stTextInput input {
+    .stTextInput textarea {
         background-color: #a9d1f5;  /* Light blue background for light theme */
         color: #000;  /* Black text for light themes */
-        border: none;  /* Remove border */
+        border: 2px solid #007acc;  /* Add a border with color */
         border-radius: 5px;  /* Rounded corners */
         padding: 10px;
         font-size: 16px;  /* Slightly larger font for better readability */
     }
-    .stTextInput input:focus {
+    .stTextInput textarea:focus {
         background-color: #e0f7ff;  /* Light blue background when focused */
+        border-color: #005f99;  /* Darker border color on focus */
         outline: none;  /* Remove focus outline */
     }
-    .st-dark .stTextInput input {
+    .st-dark .stTextInput textarea {
         background-color: #333333;  /* Dark background for dark theme */
         color: #d3d3d3;  /* Light gray text for better contrast */
-        border: none;  /* Remove border */
+        border: 2px solid #4caf50;  /* Green border for dark mode */
         border-radius: 5px;  /* Rounded corners */
         padding: 10px;
         font-size: 16px;  /* Slightly larger font for better readability */
     }
-    .st-dark .stTextInput input:focus {
+    .st-dark .stTextInput textarea:focus {
         background-color: #3a4e5c;  /* Slightly lighter dark background when focused */
+        border-color: #45a049;  /* Darker green border on focus */
         outline: none;  /* Remove focus outline */
     }
     </style>
     """,
     unsafe_allow_html=True,
 )
+
 st.logo("./bot.png")
 st.title("I'm here to help you...")
 
