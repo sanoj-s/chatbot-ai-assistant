@@ -17,7 +17,7 @@ st.markdown(
     """
     <style>
     .stTextInput textarea {
-        background-color: #a9d1f5;  /* Light blue background for light theme */
+        background-color: #7cbaf2; 
         color: #000;  /* Black text for light themes */
         border: 2px solid #007acc;  /* Add a border with color */
         border-radius: 5px;  /* Rounded corners */
