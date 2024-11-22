@@ -12,31 +12,33 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-# Define the background color for the edit field
+# Define the background color and border for the text area
 st.markdown(
     """
     <style>
-    .stTextInput input {
+    .stTextArea textarea {
         background-color: #a9d1f5;  /* Light blue background for light theme */
         color: #000;  /* Black text for light themes */
-        border: none;  /* Remove border */
+        border: 2px solid #007bff;  /* Blue border */
         border-radius: 5px;  /* Rounded corners */
-        padding: 10px;
+        padding: 10px;  /* Padding inside the text area */
     }
-    .stTextInput input:focus {
-        background-color: #e0f7ff;  /* Light blue background when focused */
-        outline: none;  /* Remove focus outline */
+    .stTextArea textarea:focus {
+        background-color: #e0f7ff;  /* Lighter blue background when focused */
+        border: 2px solid #0056b3;  /* Darker blue border on focus */
+        outline: none;  /* Remove default focus outline */
     }
-    .st-dark .stTextInput input {
+    .st-dark .stTextArea textarea {
         background-color: #1e1e1e;  /* Dark background for dark theme */
         color: #d3d3d3;  /* Light gray text for better contrast in dark theme */
-        border: none;  /* Remove border */
+        border: 2px solid #4caf50;  /* Green border for dark mode */
         border-radius: 5px;  /* Rounded corners */
-        padding: 10px;
+        padding: 10px;  /* Padding inside the text area */
     }
-    .st-dark .stTextInput input:focus {
+    .st-dark .stTextArea textarea:focus {
         background-color: #3a4e5c;  /* Slightly lighter dark background when focused */
-        outline: none;  /* Remove focus outline */
+        border: 2px solid #388e3c;  /* Darker green border on focus */
+        outline: none;  /* Remove default focus outline */
     }
     </style>
     """,
