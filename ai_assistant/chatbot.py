@@ -16,6 +16,10 @@ prompt = ChatPromptTemplate.from_messages(
 st.markdown(
     """
     <style>
+    .stTextArea {
+        position: relative;
+    }
+    
     .stTextArea textarea {
         background-color: #e8f6fa;  /* Light blue background for light theme */
         color: #000;  /* Black text for light themes */
@@ -23,12 +27,15 @@ st.markdown(
         border-radius: 5px;  /* Rounded corners */
         padding: 10px;  /* Padding inside the text area */
         width: 100%;  /* Full width */
+        box-sizing: border-box;  /* Ensure the padding doesn't affect width */
     }
+
     .stTextArea textarea:focus {
         background-color: #e0f7ff;  /* Lighter blue background when focused */
         border: none;  /* Remove border color when focused */
         outline: none;  /* Remove default focus outline */
     }
+
     .st-dark .stTextArea textarea {
         background-color: #1e1e1e;  /* Dark background for dark theme */
         color: #d3d3d3;  /* Light gray text for better contrast in dark theme */
@@ -40,6 +47,23 @@ st.markdown(
         background-color: #3a4e5c;  /* Slightly lighter dark background when focused */
         border: none;  /* Remove border color when focused */
         outline: none;  /* Remove default focus outline */
+    }
+
+    .stTextArea .send-button {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .stTextArea .send-button:hover {
+        background-color: #0056b3;
     }
     </style>
     """,
@@ -58,7 +82,7 @@ st.markdown(
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();  // Prevents newline and sends the message
                     // Trigger the submit button click
-                    const button = document.querySelector('button[data-baseweb="button"]');
+                    const button = document.querySelector('.send-button');
                     if (button) {
                         button.click();
                     }
@@ -118,15 +142,19 @@ def handle_input():
         st.session_state.input_text = ""
 
 # Create a submit button to manually trigger the input
-submit_button = st.button("Send", on_click=handle_input)
+submit_button = st.button("Send", key="submit", on_click=handle_input)
 
-# Create the input field with the callback
-st.text_area(
-    "",
-    key="input_text",
-    height=100,
-    placeholder="How can I help you today?",
-)
+# Create the input field with the callback and position the button
+col1, col2 = st.columns([4, 1])
+with col1:
+    st.text_area(
+        "",
+        key="input_text",
+        height=100,
+        placeholder="How can I help you today?",
+    )
+with col2:
+    st.markdown('<button class="send-button" onclick="window.location.reload()">Send</button>', unsafe_allow_html=True)
 
 # Group conversation pairs and display latest first
 if st.session_state.conversation_history:
