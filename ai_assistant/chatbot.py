@@ -22,17 +22,19 @@ st.markdown(
         border: none;  /* Remove border */
         border-radius: 5px;  /* Rounded corners */
         padding: 10px;
+        font-size: 16px;  /* Slightly larger font for better readability */
     }
     .stTextInput input:focus {
         background-color: #e0f7ff;  /* Light blue background when focused */
         outline: none;  /* Remove focus outline */
     }
     .st-dark .stTextInput input {
-        background-color: #1e1e1e;  /* Dark background for dark theme */
-        color: #d3d3d3;  /* Light gray text for better contrast in dark theme */
+        background-color: #333333;  /* Dark background for dark theme */
+        color: #d3d3d3;  /* Light gray text for better contrast */
         border: none;  /* Remove border */
         border-radius: 5px;  /* Rounded corners */
         padding: 10px;
+        font-size: 16px;  /* Slightly larger font for better readability */
     }
     .st-dark .stTextInput input:focus {
         background-color: #3a4e5c;  /* Slightly lighter dark background when focused */
@@ -42,7 +44,6 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-
 st.logo("./bot.png")
 st.title("I'm here to help you...")
 
