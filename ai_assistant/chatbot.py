@@ -57,8 +57,8 @@ st.markdown(
                 // Send the message when Enter is pressed (without Shift)
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();  // Prevents newline and sends the message
-                    // Trigger the button click (simulate a user input submission)
-                    const button = document.querySelector('button[type="submit"]');
+                    // Trigger the submit button click
+                    const button = document.querySelector('button[data-baseweb="button"]');
                     if (button) {
                         button.click();
                     }
@@ -117,11 +117,13 @@ def handle_input():
         # Clear the input field
         st.session_state.input_text = ""
 
+# Create a submit button to manually trigger the input
+submit_button = st.button("Send", on_click=handle_input)
+
 # Create the input field with the callback
 st.text_area(
     "",
     key="input_text",
-    on_change=handle_input,
     height=100,
     placeholder="How can I help you today?",
 )
