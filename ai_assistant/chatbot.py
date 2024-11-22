@@ -91,11 +91,12 @@ def handle_input():
         st.session_state.input_text = ""
 
 # Create the input field with the callback
-st.text_input(
-    label="",  # Remove the label
-    placeholder="How can I help you today?",
+st.text_area(
+    label="", 
+    placeholder="How can I help you today?", 
     key="input_text",
     on_change=handle_input,
+    height=100, 
 )
 
 # Group conversation pairs and display latest first
