@@ -90,22 +90,6 @@ def handle_input():
         # Clear the input field
         st.session_state.input_text = ""
 
-# JavaScript to detect "Enter" key press and update the Streamlit input
-st.markdown(
-    """
-    <script>
-    const textArea = window.parent.document.querySelector('textarea');
-    textArea.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter' && !event.shiftKey) {  // Check for "Enter" without "Shift"
-            event.preventDefault();  // Prevent new line
-            textArea.dispatchEvent(new Event('change', { bubbles: true }));  // Trigger Streamlit callback
-        }
-    });
-    </script>
-    """,
-    unsafe_allow_html=True,
-)
-
 # Create the input field with the callback
 st.text_area(
     label="", 
