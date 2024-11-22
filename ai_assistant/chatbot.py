@@ -90,11 +90,17 @@ def handle_input():
         st.session_state.input_text = ""
 
 # Create the input field with the callback
-st.text_input(
-    "Ask your question!",
+st.text_area(
+    "",
     key="input_text",
     on_change=handle_input,
+    height=100,  # Adjust height as needed for a comfortable input size
+    placeholder="How can I help you today?",
 )
+
+# Add a submit button for sending the message
+if st.button("Enter"):
+    handle_input()
 
 # Group conversation pairs and display latest first
 if st.session_state.conversation_history:
