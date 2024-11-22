@@ -22,6 +22,7 @@ st.markdown(
         border: 2px solid #007bff;  /* Blue border */
         border-radius: 5px;  /* Rounded corners */
         padding: 10px;  /* Padding inside the text area */
+        width: 100%;  /* Full width */
     }
     .stTextArea textarea:focus {
         background-color: #e0f7ff;  /* Lighter blue background when focused */
@@ -41,6 +42,31 @@ st.markdown(
         outline: none;  /* Remove default focus outline */
     }
     </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# JavaScript to handle the Enter and Shift+Enter behavior
+st.markdown(
+    """
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const textarea = document.querySelector('textarea');
+        if (textarea) {
+            textarea.addEventListener('keydown', function(e) {
+                // Send the message when Enter is pressed (without Shift)
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();  // Prevents newline and sends the message
+                    // Trigger the button click (simulate a user input submission)
+                    const button = document.querySelector('button[type="submit"]');
+                    if (button) {
+                        button.click();
+                    }
+                }
+            });
+        }
+    });
+    </script>
     """,
     unsafe_allow_html=True,
 )
