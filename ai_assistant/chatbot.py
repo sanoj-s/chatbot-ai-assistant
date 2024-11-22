@@ -25,7 +25,7 @@ st.markdown(
     }
     .stTextArea textarea:focus {
         background-color: #e0f7ff;  /* Lighter blue background when focused */
-        border: 2px solid #007bff;  /* Keep same border color on focus */
+        border: none;  /* Remove border color when focused */
         outline: none;  /* Remove default focus outline */
     }
     .st-dark .stTextArea textarea {
@@ -37,7 +37,7 @@ st.markdown(
     }
     .st-dark .stTextArea textarea:focus {
         background-color: #3a4e5c;  /* Slightly lighter dark background when focused */
-        border: 2px solid #4caf50;  /* Keep same border color on focus */
+        border: none;  /* Remove border color when focused */
         outline: none;  /* Remove default focus outline */
     }
     </style>
