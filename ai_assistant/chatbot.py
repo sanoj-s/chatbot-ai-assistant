@@ -12,7 +12,6 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-# Define the background color for the edit field
 # Add custom CSS for positioning the "Send" button
 st.markdown(
     """
