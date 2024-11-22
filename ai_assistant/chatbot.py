@@ -92,7 +92,8 @@ def handle_input():
 
 # Create the input field with the callback
 st.text_input(
-    "Ask your question!",
+    label="",  # Remove the label
+    placeholder="How can I help you today?",
     key="input_text",
     on_change=handle_input,
 )
