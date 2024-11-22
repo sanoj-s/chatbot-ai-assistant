@@ -12,33 +12,31 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-# Add custom CSS for positioning the "Send" button
+# Define the background color for the edit field
 st.markdown(
     """
     <style>
-    .input-container {
-        display: flex;
-        align-items: center;
-        position: relative;
+    .stTextInput input {
+        background-color: #a9d1f5;  /* Light blue background for light theme */
+        color: #000;  /* Black text for light themes */
+        border: none;  /* Remove border */
+        border-radius: 5px;  /* Rounded corners */
+        padding: 10px;
     }
-    .text-area {
-        flex: 1;
-        padding-right: 50px;  /* Make room for the button */
+    .stTextInput input:focus {
+        background-color: #e0f7ff;  /* Light blue background when focused */
+        outline: none;  /* Remove focus outline */
     }
-    .send-button {
-        position: absolute;
-        right: 10px;
-        bottom: 10px;
-        background-color: #007acc;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 8px 15px;
-        cursor: pointer;
-        font-size: 16px;
+    .st-dark .stTextInput input {
+        background-color: #1e1e1e;  /* Dark background for dark theme */
+        color: #d3d3d3;  /* Light gray text for better contrast in dark theme */
+        border: none;  /* Remove border */
+        border-radius: 5px;  /* Rounded corners */
+        padding: 10px;
     }
-    .send-button:hover {
-        background-color: #005f99;
+    .st-dark .stTextInput input:focus {
+        background-color: #3a4e5c;  /* Slightly lighter dark background when focused */
+        outline: none;  /* Remove focus outline */
     }
     </style>
     """,
@@ -91,20 +89,12 @@ def handle_input():
         # Clear the input field
         st.session_state.input_text = ""
 
-# Display the input field and button in a container
-st.markdown('<div class="input-container">', unsafe_allow_html=True)
-st.text_area(
-    label="", 
-    placeholder="How can I help you today?", 
+# Create the input field with the callback
+st.text_input(
+    "Ask your question!",
     key="input_text",
-    height=100, 
-    label_visibility="collapsed",
-    on_change=None,
-    class_name="text-area"
+    on_change=handle_input,
 )
-if st.button("Send", type="primary", key="send-button", help="Submit your question"):
-    handle_input()
-st.markdown('</div>', unsafe_allow_html=True)
 
 # Group conversation pairs and display latest first
 if st.session_state.conversation_history:
