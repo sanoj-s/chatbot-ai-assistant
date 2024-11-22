@@ -12,30 +12,32 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-# Define the background color and border for the text area
+# Define the background color and border for the text field (normal input field)
 st.markdown(
     """
     <style>
-    .stTextArea textarea {
+    .stTextInput input {
         background-color: #e8f6fa;  /* Light blue background for light theme */
         color: #000;  /* Black text for light themes */
         border: 2px solid #007bff;  /* Blue border */
         border-radius: 5px;  /* Rounded corners */
-        padding: 10px;  /* Padding inside the text area */
+        padding: 10px;  /* Padding inside the input field */
+        width: 100%;  /* Increased width */
     }
-    .stTextArea textarea:focus {
+    .stTextInput input:focus {
         background-color: #e0f7ff;  /* Lighter blue background when focused */
         border: none;  /* Remove border color when focused */
         outline: none;  /* Remove default focus outline */
     }
-    .st-dark .stTextArea textarea {
+    .st-dark .stTextInput input {
         background-color: #1e1e1e;  /* Dark background for dark theme */
         color: #d3d3d3;  /* Light gray text for better contrast in dark theme */
         border: 2px solid #4caf50;  /* Green border for dark mode */
         border-radius: 5px;  /* Rounded corners */
-        padding: 10px;  /* Padding inside the text area */
+        padding: 10px;  /* Padding inside the input field */
+        width: 100%;  /* Increased width */
     }
-    .st-dark .stTextArea textarea:focus {
+    .st-dark .stTextInput input:focus {
         background-color: #3a4e5c;  /* Slightly lighter dark background when focused */
         border: none;  /* Remove border color when focused */
         outline: none;  /* Remove default focus outline */
@@ -91,12 +93,12 @@ def handle_input():
         # Clear the input field
         st.session_state.input_text = ""
 
-# Create the input field with the callback
-st.text_area(
+# Create the text input field with the callback
+st.text_input(
     "",
     key="input_text",
     on_change=handle_input,
-    height=100,
+    max_chars=500,  # Optional, sets the max characters limit for the input
     placeholder="How can I help you today?",
 )
 
