@@ -99,6 +99,9 @@ def handle_input():
                 "Please try again."
             )
             st.session_state.conversation_history.append(("assistant", warning_message))
+            # Immediately display the warning message
+            st.markdown(f"<span style='color:green;'>**Bot:**</span>", unsafe_allow_html=True)
+            st.markdown(f"```markdown\n{warning_message}\n```")
 
         # Clear the input field
         st.session_state.input_text = ""
