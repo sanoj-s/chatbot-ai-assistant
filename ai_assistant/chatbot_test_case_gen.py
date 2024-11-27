@@ -111,9 +111,9 @@ st.text_input(
     placeholder="Describe the test scenario (e.g., 'Generate test cases for login functionality')",
 )
 
-# Display conversation history in chronological order (latest last)
+# Display conversation history in reverse chronological order (latest first)
 if st.session_state.conversation_history:
-    for pair in st.session_state.conversation_history:
+    for pair in reversed(st.session_state.conversation_history):
         if pair[0] == "user":
             st.markdown(f"<span style='color:blue;'>**You:** {pair[1]}</span>", unsafe_allow_html=True)
         elif pair[0] == "assistant":
