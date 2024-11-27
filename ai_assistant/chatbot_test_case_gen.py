@@ -95,7 +95,7 @@ def handle_input():
         else:
             # Display a warning message as a bot response
             warning_message = (
-                "Your input must start with 'Generate test cases' to receive test cases. "
+                "Sorry, your input must start with 'Generate test cases' to receive test cases. "
                 "Please try again."
             )
             st.session_state.conversation_history.append(("assistant", warning_message))
