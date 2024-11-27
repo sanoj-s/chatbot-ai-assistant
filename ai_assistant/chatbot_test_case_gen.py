@@ -73,24 +73,49 @@ def generate_excel(data):
     buffer.seek(0)
     return buffer
 
+def parse_bot_message(bot_message):
+    """Parse the bot's message to extract test case details."""
+    parsed_data = {
+        "Test Case Title": None,
+        "Test Steps": None,
+        "Expected Result": None,
+        "Test Data": None,
+        "Test Environment": None,
+    }
+
+    sections = ["Test Case Title", "Test Steps", "Expected Result", "Test Data", "Test Environment"]
+    current_section = None
+
+    for line in bot_message.splitlines():
+        line = line.strip()
+        for section in sections:
+            if line.startswith(f"{section}:"):
+                current_section = section
+                parsed_data[section] = line.split(":", 1)[1].strip()
+                break
+        else:
+            if current_section and parsed_data[current_section]:
+                parsed_data[current_section] += " " + line
+
+    if not parsed_data["Test Case Title"]:
+        parsed_data["Test Case Title"] = "Untitled Test Case"
+
+    return parsed_data
+
 # Callback function to handle input and generate responses
 def handle_input():
     input_text = st.session_state.input_text.strip()
     if input_text:
-        # Add the user's input to conversation history
         st.session_state.conversation_history.append(("user", input_text))
 
-        # Prepare the conversation history for the model
         chat_history = [
             ("system", "You are a testing assistant. Your job is to write manual test cases."),
         ] + st.session_state.conversation_history
 
         try:
-            # Create a dynamic prompt from conversation history
             modified_prompt = ChatPromptTemplate.from_messages(chat_history)
             modified_chain = modified_prompt | llm
 
-            # Get the response
             response = modified_chain.invoke({"question": input_text})
             content = getattr(response, "content", None) or response.get("content", None)
 
@@ -101,7 +126,6 @@ def handle_input():
         except Exception as e:
             st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
 
-        # Clear the input field
         st.session_state.input_text = ""
 
 # Create the input field with callback
@@ -129,14 +153,10 @@ if st.session_state.conversation_history:
         st.markdown(f"<span style='color:green;'>**Bot:**</span>", unsafe_allow_html=True)
         st.markdown(f"```markdown\n{bot_message}\n```")
 
-        # Parse bot message to extract test case details (example parsing, adjust as needed)
+        parsed = parse_bot_message(bot_message)
         data.append({
             "Test Case ID": len(data) + 1,
-            "Test Case Title": user_message,
-            "Test Steps": bot_message,
-            "Expected Result": "Define expected result.",  # Replace with parsing logic if possible
-            "Test Data": "Define test data.",  # Replace with parsing logic if possible
-            "Test Environment": "Define environment.",  # Replace with parsing logic if possible
+            **parsed,
         })
 
 # Add a download button for test cases in Excel format
