@@ -92,9 +92,9 @@ def handle_input():
             except Exception as e:
                 st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
 
-            # Display conversation history in reverse chronological order
+            # Display conversation history in chronological order
             if st.session_state.conversation_history:
-                for pair in reversed(st.session_state.conversation_history):
+                for pair in st.session_state.conversation_history:
                     if pair[0] == "user":
                         st.markdown(f"<span style='color:blue;'>**You:** {pair[1]}</span>", unsafe_allow_html=True)
                     elif pair[0] == "assistant":
@@ -115,6 +115,7 @@ def handle_input():
                 "Your input must start with 'Generate the manual test cases' to receive test cases. "
                 "Please try again."
             )
+            st.markdown(f"<span style='color:blue;'>**You:** {input_text}</span>", unsafe_allow_html=True)
             st.markdown(f"<span style='color:green;'>**Bot:** {warning_message}</span>", unsafe_allow_html=True)
 
         # Clear the input field
