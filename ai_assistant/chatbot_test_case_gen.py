@@ -1,10 +1,7 @@
 import os
-import pandas as pd
-from io import BytesIO
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 import streamlit as st
-import re
 
 # Set up OpenAI API key
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
@@ -65,75 +62,6 @@ if "conversation_history" not in st.session_state:
 if "input_text" not in st.session_state:
     st.session_state.input_text = ""
 
-def parse_single_test_case(bot_message):
-    """Parse a single test case from the bot's message."""
-    parsed_data = {
-        "Test Case ID": "",
-        "Test Case Title": "",
-        "Test Steps": "",
-        "Expected Result": "",
-        "Test Data": "",
-        "Test Environment": "Default Environment"  # Default value
-    }
-
-    # Extract fields using regular expressions
-    match_id = re.search(r"\*\*Test Case ID:\*\* (.+)", bot_message)
-    if match_id:
-        parsed_data["Test Case ID"] = match_id.group(1).strip()
-
-    match_title = re.search(r"\*\*Test Case for (.+)\*\*", bot_message)
-    if match_title:
-        parsed_data["Test Case Title"] = match_title.group(1).strip()
-
-    match_steps = re.search(r"\*\*Test Steps:\*\*(.+?)(\*\*|$)", bot_message, re.DOTALL)
-    if match_steps:
-        parsed_data["Test Steps"] = match_steps.group(1).strip()
-
-    match_result = re.search(r"\*\*Expected Result:\*\*(.+?)(\*\*|$)", bot_message, re.DOTALL)
-    if match_result:
-        parsed_data["Expected Result"] = match_result.group(1).strip()
-
-    match_data = re.search(r"\*\*Test Data:\*\*(.+?)(\*\*|$)", bot_message, re.DOTALL)
-    if match_data:
-        parsed_data["Test Data"] = match_data.group(1).strip()
-
-    return parsed_data
-
-def parse_multiple_test_cases(bot_message):
-    """Parse multiple test cases from the bot's message."""
-    test_cases = []
-    matches = re.findall(
-        r"(Test Case \d+:.*?)(?=(Test Case \d+:)|$)", bot_message, re.DOTALL
-    )
-    for match in matches:
-        case_details = match[0]
-        parsed_case = {
-            "Test Case ID": re.search(r"Test Case (\d+):", case_details).group(1),
-            "Test Case Title": re.search(r"Test Case \d+: (.+)", case_details).group(1),
-            "Test Steps": re.search(r"Input:(.+?)(?=Expected Output:|$)", case_details, re.DOTALL).group(1).strip(),
-            "Expected Result": re.search(r"Expected Output:(.+?)(?=Preconditions:|$)", case_details, re.DOTALL).group(1).strip(),
-            "Test Data": "Not Specified",  # Placeholder
-            "Test Environment": "Default Environment",  # Default
-        }
-        test_cases.append(parsed_case)
-    return test_cases
-
-def parse_bot_message(bot_message):
-    """Determine whether the message contains single or multiple test cases."""
-    if "Test Case 1:" in bot_message:  # Heuristic for multiple test cases
-        return parse_multiple_test_cases(bot_message)
-    else:
-        return [parse_single_test_case(bot_message)]
-
-def generate_excel(data):
-    """Generate an Excel file from the test case data."""
-    df = pd.DataFrame(data)
-    buffer = BytesIO()
-    with pd.ExcelWriter(buffer, engine="xlsxwriter") as writer:
-        df.to_excel(writer, index=False, sheet_name="Test Cases")
-    buffer.seek(0)
-    return buffer
-
 # Callback function to handle input and generate responses
 def handle_input():
     input_text = st.session_state.input_text.strip()
@@ -173,10 +101,6 @@ st.text_input(
     placeholder="Describe the test case scenario (e.g., 'Write a test case for login functionality')",
 )
 
-# Prepare test case data
-columns = ["Test Case ID", "Test Case Title", "Test Steps", "Expected Result", "Test Data", "Test Environment"]
-data = []
-
 # Display conversation history in reverse chronological order
 if st.session_state.conversation_history:
     conversation_pairs = []
@@ -190,16 +114,12 @@ if st.session_state.conversation_history:
         st.markdown(f"<span style='color:green;'>**Bot:**</span>", unsafe_allow_html=True)
         st.markdown(f"```markdown\n{bot_message}\n```")
 
-        # Parse bot message to extract test case details
-        parsed_details = parse_bot_message(bot_message)
-        data.extend(parsed_details)
-
-# Add a download button for test cases in Excel format
-if data:
-    excel_file = generate_excel(data)
+# Add a download button for test cases
+if st.session_state.conversation_history:
+    formatted_test_cases = "\n\n".join([f"**You:** {pair[0]}\n**Bot:** {pair[1]}" for pair in conversation_pairs])
     st.download_button(
-        label="Download Test Cases as Excel",
-        data=excel_file,
-        file_name="test_cases.xlsx",
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        label="Download Test Cases",
+        data=formatted_test_cases,
+        file_name="test_cases.txt",
+        mime="text/plain",
     )
