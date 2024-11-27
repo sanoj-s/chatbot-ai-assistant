@@ -113,12 +113,15 @@ st.text_input(
 
 # Display conversation history in reverse chronological order (latest first)
 if st.session_state.conversation_history:
-    for pair in reversed(st.session_state.conversation_history):
-        if pair[0] == "user":
-            st.markdown(f"<span style='color:blue;'>**You:** {pair[1]}</span>", unsafe_allow_html=True)
-        elif pair[0] == "assistant":
-            st.markdown(f"<span style='color:green;'>**Bot:**</span>", unsafe_allow_html=True)
-            st.markdown(f"```markdown\n{pair[1]}\n```")
+    for i in range(len(st.session_state.conversation_history) - 1, -1, -2):
+        if i > 0:  # Ensure there's a pair (user and bot response)
+            user_message = st.session_state.conversation_history[i - 1]
+            bot_response = st.session_state.conversation_history[i]
+
+            if user_message[0] == "user" and bot_response[0] == "assistant":
+                st.markdown(f"<span style='color:blue;'>**You:** {user_message[1]}</span>", unsafe_allow_html=True)
+                st.markdown(f"<span style='color:green;'>**Bot:**</span>", unsafe_allow_html=True)
+                st.markdown(f"```markdown\n{bot_response[1]}\n```")
 
 # Add a download button for test cases only if the last bot response is not the warning message
 if st.session_state.conversation_history and not st.session_state.conversation_history[-1][1].startswith("Sorry, your input must start"):
