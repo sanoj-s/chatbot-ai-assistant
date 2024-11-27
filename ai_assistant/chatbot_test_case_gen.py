@@ -64,7 +64,7 @@ if "input_text" not in st.session_state:
 
 # Callback function to handle input and generate responses
 def handle_input():
-    input_text = st.session_state.input_text.strip() + " with steps"
+    input_text = st.session_state.input_text.strip()
     if input_text:
         # Check if the input starts with the required phrase
         if input_text.lower().startswith("generate test cases"):
