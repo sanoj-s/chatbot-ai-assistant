@@ -67,7 +67,7 @@ def handle_input():
     input_text = st.session_state.input_text.strip()
     if input_text:
         # Check if the input starts with the required phrase
-        if input_text.lower().startswith("generate the manual test cases"):
+        if input_text.lower().startswith("generate the test cases"):
             # Add the user's input to conversation history
             st.session_state.conversation_history.append(("user", input_text))
 
@@ -95,7 +95,7 @@ def handle_input():
         else:
             # Display a warning message as a bot response
             warning_message = (
-                "Your input must start with 'Generate the manual test cases' to receive test cases. "
+                "Your input must start with 'Generate the test cases' to receive test cases. "
                 "Please try again."
             )
             st.session_state.conversation_history.append(("assistant", warning_message))
@@ -108,7 +108,7 @@ st.text_input(
     "",
     key="input_text",
     on_change=handle_input,
-    placeholder="Describe the test scenario (e.g., 'Generate the manual test cases for login functionality')",
+    placeholder="Describe the test scenario (e.g., 'Generate the test cases for login functionality')",
 )
 
 # Display conversation history in chronological order
