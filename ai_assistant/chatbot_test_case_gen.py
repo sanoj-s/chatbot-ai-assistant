@@ -98,7 +98,7 @@ st.text_input(
     "",
     key="input_text",
     on_change=handle_input,
-    placeholder="Describe the test scenario(e.g., 'Generate your manual test cases for login functionality')",
+    placeholder="Describe the test scenario(e.g., 'Generate the manual test cases for login functionality')",
 )
 
 # Display conversation history in reverse chronological order
