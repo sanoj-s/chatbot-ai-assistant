@@ -111,14 +111,15 @@ st.text_input(
     placeholder="Describe the test scenario (e.g., 'Generate test cases for login functionality')",
 )
 
-# Display conversation history in reverse chronological order (latest first)
+# Display conversation history in reverse chronological order (latest first), but pair user and bot responses correctly
 if st.session_state.conversation_history:
-    for pair in reversed(st.session_state.conversation_history):
-        if pair[0] == "user":
-            st.markdown(f"<span style='color:blue;'>**You:** {pair[1]}</span>", unsafe_allow_html=True)
-        elif pair[0] == "assistant":
+    for i in range(0, len(st.session_state.conversation_history) - 1, 2):
+        if i + 1 < len(st.session_state.conversation_history):
+            # Display "You" message
+            st.markdown(f"<span style='color:blue;'>**You:** {st.session_state.conversation_history[i][1]}</span>", unsafe_allow_html=True)
+            # Display "Bot" response
             st.markdown(f"<span style='color:green;'>**Bot:**</span>", unsafe_allow_html=True)
-            st.markdown(f"```markdown\n{pair[1]}\n```")
+            st.markdown(f"```markdown\n{st.session_state.conversation_history[i + 1][1]}\n```")
 
 # Add a download button for test cases only if the last bot response is not the warning message
 if st.session_state.conversation_history and not st.session_state.conversation_history[-1][1].startswith("Sorry, your input must start"):
