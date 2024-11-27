@@ -92,31 +92,13 @@ def handle_input():
             except Exception as e:
                 st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
 
-            # Display conversation history in chronological order
-            if st.session_state.conversation_history:
-                for pair in st.session_state.conversation_history:
-                    if pair[0] == "user":
-                        st.markdown(f"<span style='color:blue;'>**You:** {pair[1]}</span>", unsafe_allow_html=True)
-                    elif pair[0] == "assistant":
-                        st.markdown(f"<span style='color:green;'>**Bot:**</span>", unsafe_allow_html=True)
-                        st.markdown(f"```markdown\n{pair[1]}\n```")
-
-            # Add a download button for test cases
-            formatted_test_cases = "\n\n".join([f"**You:** {pair[1]}\n**Bot:** {pair[1]}" for pair in st.session_state.conversation_history if pair[0] == "assistant"])
-            st.download_button(
-                label="Download Test Cases",
-                data=formatted_test_cases,
-                file_name="test_cases.txt",
-                mime="text/plain",
-            )
         else:
             # Display a warning message as a bot response
             warning_message = (
                 "Your input must start with 'Generate the manual test cases' to receive test cases. "
                 "Please try again."
             )
-            st.markdown(f"<span style='color:blue;'>**You:** {input_text}</span>", unsafe_allow_html=True)
-            st.markdown(f"<span style='color:green;'>**Bot:** {warning_message}</span>", unsafe_allow_html=True)
+            st.session_state.conversation_history.append(("assistant", warning_message))
 
         # Clear the input field
         st.session_state.input_text = ""
@@ -128,3 +110,26 @@ st.text_input(
     on_change=handle_input,
     placeholder="Describe the test scenario (e.g., 'Generate the manual test cases for login functionality')",
 )
+
+# Display conversation history in chronological order
+if st.session_state.conversation_history:
+    for pair in st.session_state.conversation_history:
+        if pair[0] == "user":
+            st.markdown(f"<span style='color:blue;'>**You:** {pair[1]}</span>", unsafe_allow_html=True)
+        elif pair[0] == "assistant":
+            st.markdown(f"<span style='color:green;'>**Bot:**</span>", unsafe_allow_html=True)
+            st.markdown(f"```markdown\n{pair[1]}\n```")
+
+# Add a download button for test cases if valid responses exist
+if any(pair[0] == "assistant" and not pair[1].startswith("Your input must start") for pair in st.session_state.conversation_history):
+    formatted_test_cases = "\n\n".join([
+        f"**You:** {pair[1]}\n**Bot:** {response[1]}"
+        for pair, response in zip(st.session_state.conversation_history, st.session_state.conversation_history[1:])
+        if pair[0] == "user" and response[0] == "assistant"
+    ])
+    st.download_button(
+        label="Download Test Cases",
+        data=formatted_test_cases,
+        file_name="test_cases.txt",
+        mime="text/plain",
+    )
