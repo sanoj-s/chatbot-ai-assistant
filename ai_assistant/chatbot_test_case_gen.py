@@ -1,4 +1,6 @@
 import os
+import pandas as pd
+from io import BytesIO
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 import streamlit as st
@@ -62,6 +64,15 @@ if "conversation_history" not in st.session_state:
 if "input_text" not in st.session_state:
     st.session_state.input_text = ""
 
+def generate_excel(data):
+    """Generate an Excel file from the test case data."""
+    df = pd.DataFrame(data)
+    buffer = BytesIO()
+    with pd.ExcelWriter(buffer, engine="xlsxwriter") as writer:
+        df.to_excel(writer, index=False, sheet_name="Test Cases")
+    buffer.seek(0)
+    return buffer
+
 # Callback function to handle input and generate responses
 def handle_input():
     input_text = st.session_state.input_text.strip()
@@ -101,6 +112,10 @@ st.text_input(
     placeholder="Describe the test case scenario (e.g., 'Write a test case for login functionality')",
 )
 
+# Prepare test case data
+columns = ["Test Case ID", "Test Case Title", "Test Steps", "Expected Result", "Test Data", "Test Environment"]
+data = []
+
 # Display conversation history in reverse chronological order
 if st.session_state.conversation_history:
     conversation_pairs = []
@@ -114,12 +129,22 @@ if st.session_state.conversation_history:
         st.markdown(f"<span style='color:green;'>**Bot:**</span>", unsafe_allow_html=True)
         st.markdown(f"```markdown\n{bot_message}\n```")
 
-# Add a download button for test cases
-if st.session_state.conversation_history:
-    formatted_test_cases = "\n\n".join([f"**You:** {pair[0]}\n**Bot:** {pair[1]}" for pair in conversation_pairs])
+        # Parse bot message to extract test case details (example parsing, adjust as needed)
+        data.append({
+            "Test Case ID": len(data) + 1,
+            "Test Case Title": user_message,
+            "Test Steps": bot_message,
+            "Expected Result": "Define expected result.",  # Replace with parsing logic if possible
+            "Test Data": "Define test data.",  # Replace with parsing logic if possible
+            "Test Environment": "Define environment.",  # Replace with parsing logic if possible
+        })
+
+# Add a download button for test cases in Excel format
+if data:
+    excel_file = generate_excel(data)
     st.download_button(
-        label="Download Test Cases",
-        data=formatted_test_cases,
-        file_name="test_cases.txt",
-        mime="text/plain",
+        label="Download Test Cases as Excel",
+        data=excel_file,
+        file_name="test_cases.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     )
