@@ -120,8 +120,8 @@ if st.session_state.conversation_history:
             st.markdown(f"<span style='color:green;'>**Bot:**</span>", unsafe_allow_html=True)
             st.markdown(f"```markdown\n{pair[1]}\n```")
 
-# Add a download button for test cases if valid responses exist
-if any(pair[0] == "assistant" and not pair[1].startswith("Your input must start") for pair in st.session_state.conversation_history):
+# Add a download button for test cases only if the last bot response is not the warning message
+if st.session_state.conversation_history and not st.session_state.conversation_history[-1][1].startswith("Sorry, your input must start"):
     formatted_test_cases = "\n\n".join([
         f"**You:** {pair[1]}\n**Bot:** {response[1]}"
         for pair, response in zip(st.session_state.conversation_history, st.session_state.conversation_history[1:])
