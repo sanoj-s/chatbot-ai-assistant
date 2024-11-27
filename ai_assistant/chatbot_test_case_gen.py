@@ -66,29 +66,38 @@ if "input_text" not in st.session_state:
 def handle_input():
     input_text = st.session_state.input_text.strip()
     if input_text:
-        # Add the user's input to conversation history
-        st.session_state.conversation_history.append(("user", input_text))
+        # Check if the input starts with the required phrase
+        if input_text.lower().startswith("generate the manual test cases"):
+            # Add the user's input to conversation history
+            st.session_state.conversation_history.append(("user", input_text))
 
-        # Prepare the conversation history for the model
-        chat_history = [
-            ("system", "You are a testing assistant. Your job is to write manual test cases."),
-        ] + st.session_state.conversation_history
+            # Prepare the conversation history for the model
+            chat_history = [
+                ("system", "You are a testing assistant. Your job is to write manual test cases."),
+            ] + st.session_state.conversation_history
 
-        try:
-            # Create a dynamic prompt from conversation history
-            modified_prompt = ChatPromptTemplate.from_messages(chat_history)
-            modified_chain = modified_prompt | llm
+            try:
+                # Create a dynamic prompt from conversation history
+                modified_prompt = ChatPromptTemplate.from_messages(chat_history)
+                modified_chain = modified_prompt | llm
 
-            # Get the response
-            response = modified_chain.invoke({"question": input_text})
-            content = getattr(response, "content", None) or response.get("content", None)
+                # Get the response
+                response = modified_chain.invoke({"question": input_text})
+                content = getattr(response, "content", None) or response.get("content", None)
 
-            if content:
-                st.session_state.conversation_history.append(("assistant", content))
-            else:
-                st.session_state.conversation_history.append(("assistant", "No valid response received."))
-        except Exception as e:
-            st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
+                if content:
+                    st.session_state.conversation_history.append(("assistant", content))
+                else:
+                    st.session_state.conversation_history.append(("assistant", "No valid response received."))
+            except Exception as e:
+                st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
+        else:
+            # Add a warning message to the conversation history
+            warning_message = (
+                "Your input must start with 'Generate the manual test cases' to receive test cases. "
+                "Please try again."
+            )
+            st.session_state.conversation_history.append(("assistant", warning_message))
 
         # Clear the input field
         st.session_state.input_text = ""
@@ -98,7 +107,7 @@ st.text_input(
     "",
     key="input_text",
     on_change=handle_input,
-    placeholder="Describe the test scenario(e.g., 'Generate the manual test cases for login functionality')",
+    placeholder="Describe the test scenario (e.g., 'Generate the manual test cases for login functionality')",
 )
 
 # Display conversation history in reverse chronological order
