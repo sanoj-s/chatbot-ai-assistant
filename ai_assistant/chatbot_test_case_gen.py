@@ -65,8 +65,8 @@ if "conversation_history" not in st.session_state:
 if "input_text" not in st.session_state:
     st.session_state.input_text = ""
 
-def parse_bot_message(bot_message):
-    """Parse the bot's message into structured test case details."""
+def parse_single_test_case(bot_message):
+    """Parse a single test case from the bot's message."""
     parsed_data = {
         "Test Case ID": "",
         "Test Case Title": "",
@@ -98,6 +98,32 @@ def parse_bot_message(bot_message):
         parsed_data["Test Data"] = match_data.group(1).strip()
 
     return parsed_data
+
+def parse_multiple_test_cases(bot_message):
+    """Parse multiple test cases from the bot's message."""
+    test_cases = []
+    matches = re.findall(
+        r"(Test Case \d+:.*?)(?=(Test Case \d+:)|$)", bot_message, re.DOTALL
+    )
+    for match in matches:
+        case_details = match[0]
+        parsed_case = {
+            "Test Case ID": re.search(r"Test Case (\d+):", case_details).group(1),
+            "Test Case Title": re.search(r"Test Case \d+: (.+)", case_details).group(1),
+            "Test Steps": re.search(r"Input:(.+?)(?=Expected Output:|$)", case_details, re.DOTALL).group(1).strip(),
+            "Expected Result": re.search(r"Expected Output:(.+?)(?=Preconditions:|$)", case_details, re.DOTALL).group(1).strip(),
+            "Test Data": "Not Specified",  # Placeholder
+            "Test Environment": "Default Environment",  # Default
+        }
+        test_cases.append(parsed_case)
+    return test_cases
+
+def parse_bot_message(bot_message):
+    """Determine whether the message contains single or multiple test cases."""
+    if "Test Case 1:" in bot_message:  # Heuristic for multiple test cases
+        return parse_multiple_test_cases(bot_message)
+    else:
+        return [parse_single_test_case(bot_message)]
 
 def generate_excel(data):
     """Generate an Excel file from the test case data."""
@@ -166,7 +192,7 @@ if st.session_state.conversation_history:
 
         # Parse bot message to extract test case details
         parsed_details = parse_bot_message(bot_message)
-        data.append(parsed_details)
+        data.extend(parsed_details)
 
 # Add a download button for test cases in Excel format
 if data:
