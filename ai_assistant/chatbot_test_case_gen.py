@@ -50,7 +50,7 @@ st.markdown(
 
 # Page setup
 st.logo("./bot.png")
-st.title("Manual Test Case Generator Bot")
+st.title("Generate your manual test cases...")
 
 # Initialize the model
 llm = ChatOpenAI(model="gpt-3.5-turbo")
