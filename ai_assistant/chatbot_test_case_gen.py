@@ -110,12 +110,13 @@ st.text_input(
     placeholder="Describe the test scenario (e.g., 'Login functionality')",
 )
 
-# Display conversation history in reverse chronological order (latest first)
+# Display conversation history with the latest messages at the top
 if st.session_state.conversation_history:
-    for i in range(0, len(st.session_state.conversation_history), 2):
-        if i + 1 < len(st.session_state.conversation_history):  # Check if there is a pair
-            user_message = st.session_state.conversation_history[i]
-            assistant_message = st.session_state.conversation_history[i + 1]
+    # Reverse the conversation history to show the latest messages at the top
+    for i in range(len(st.session_state.conversation_history) - 1, -1, -2):
+        if i - 1 >= 0:  # Ensure there is a previous message (i.e., user message before bot message)
+            user_message = st.session_state.conversation_history[i - 1]
+            assistant_message = st.session_state.conversation_history[i]
             
             # Display "You:" message first
             if user_message[0] == "user":
