@@ -47,12 +47,42 @@ def handle_input(input_text):
         except Exception as e:
             st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
 
+# Add custom CSS for alignment
+st.markdown(
+    """
+    <style>
+    .chat-message-user {
+        text-align: right;
+        background-color: #e0f7fa; /* Light blue background for user messages */
+        padding: 10px;
+        border-radius: 15px;
+        margin: 5px;
+        display: inline-block;
+    }
+    .chat-message-assistant {
+        text-align: left;
+        background-color: #f1f1f1; /* Light gray background for assistant messages */
+        padding: 10px;
+        border-radius: 15px;
+        margin: 5px;
+        display: inline-block;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # Display the conversation using st.chat_message
 st.title("I'm here to help you...")
 st.caption("Bot can make mistakes. Review the response prior to use.")
+
 for role, message in st.session_state.conversation_history:
-    with st.chat_message(role):
-        st.markdown(message)
+    if role == "user":
+        with st.chat_message(role):
+            st.markdown(f"<div class='chat-message-user'>{message}</div>", unsafe_allow_html=True)
+    elif role == "assistant":
+        with st.chat_message(role):
+            st.markdown(f"<div class='chat-message-assistant'>{message}</div>", unsafe_allow_html=True)
 
 # Handle user input using st.chat_input
 user_input = st.chat_input("How can I help you today?")
@@ -61,5 +91,9 @@ if user_input:
 
     # Automatically display the assistant's response
     for role, message in st.session_state.conversation_history[-2:]:
-        with st.chat_message(role):
-            st.markdown(message)
+        if role == "user":
+            with st.chat_message(role):
+                st.markdown(f"<div class='chat-message-user'>{message}</div>", unsafe_allow_html=True)
+        elif role == "assistant":
+            with st.chat_message(role):
+                st.markdown(f"<div class='chat-message-assistant'>{message}</div>", unsafe_allow_html=True)
