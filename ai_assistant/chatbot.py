@@ -57,7 +57,9 @@ st.markdown(
         padding: 10px;
         border-radius: 15px;
         margin: 5px;
-        display: inline-block;
+        margin-left: auto; /* Pushes the message to the right */
+        max-width: 70%; /* Prevents messages from stretching too far */
+        display: block;
     }
     .chat-message-assistant {
         text-align: left;
@@ -65,7 +67,9 @@ st.markdown(
         padding: 10px;
         border-radius: 15px;
         margin: 5px;
-        display: inline-block;
+        margin-right: auto; /* Pushes the message to the left */
+        max-width: 70%; /* Prevents messages from stretching too far */
+        display: block;
     }
     </style>
     """,
