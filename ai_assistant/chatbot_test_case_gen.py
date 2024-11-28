@@ -64,8 +64,8 @@ if "input_text" not in st.session_state:
     st.session_state.input_text = ""
 
 # Callback function to handle input and generate responses
-def handle_input(user_input):
-    input_text = user_input.strip()
+def handle_input():
+    input_text = st.session_state.input_text.strip()
     if input_text:
         # Store the original input for display purposes
         original_input = input_text
@@ -100,8 +100,11 @@ def handle_input(user_input):
         except Exception as e:
             st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
 
+        # Clear the input field
+        st.session_state.input_text = ""
+
 # Create the chat input field with callback
-user_input = st.chat_input(
+st.session_state.input_text = st.chat_input(
     "Describe the test scenario (e.g., 'Login functionality')",
     on_submit=handle_input,
 )
