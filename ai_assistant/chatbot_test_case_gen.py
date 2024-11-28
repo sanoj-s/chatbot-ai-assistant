@@ -51,7 +51,6 @@ st.markdown(
 # Page setup
 st.logo("./bot.png")
 st.title("Generate your manual test cases...")
-st.divider()
 st.caption("Bot can make mistakes. Review the response prior to use.")
 st.divider()
 
