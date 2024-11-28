@@ -52,7 +52,6 @@ st.markdown(
 st.logo("./bot.png")
 st.title("Generate your manual test cases...")
 st.caption("Bot can make mistakes. Review the response prior to use.")
-st.divider()
 
 # Initialize the model
 llm = ChatOpenAI(model="gpt-3.5-turbo")
