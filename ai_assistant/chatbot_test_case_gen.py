@@ -66,17 +66,20 @@ if "input_text" not in st.session_state:
 def handle_input():
     input_text = st.session_state.input_text.strip()
     if input_text:
-        # Ensure the input starts with the required prefix
+        # Store the original input for display purposes
+        original_input = input_text
+
+        # Prepend the required prefix for processing
         if not input_text.lower().startswith("generate test cases"):
             input_text = f"Generate test cases {input_text} with steps"
 
-        # Add the user's input to conversation history
-        st.session_state.conversation_history.append(("user", input_text))
+        # Add the user's original input to conversation history for display
+        st.session_state.conversation_history.append(("user", original_input))
 
         # Prepare the conversation history for the model
         chat_history = [
             ("system", "You are a testing assistant. Your job is to write manual test cases."),
-        ] + st.session_state.conversation_history
+        ] + [(role, msg) for role, msg in st.session_state.conversation_history if role == "user"]
 
         try:
             # Create a dynamic prompt from conversation history
