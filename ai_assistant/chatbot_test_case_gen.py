@@ -104,7 +104,7 @@ def handle_input():
         st.session_state.input_text = ""
 
 # Create the input field with callback
-st.text_input(
+st.chat_input(
     "",
     key="input_text",
     on_change=handle_input,
