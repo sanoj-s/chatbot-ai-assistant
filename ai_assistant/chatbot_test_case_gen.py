@@ -65,7 +65,8 @@ if "input_text" not in st.session_state:
 
 # Callback function to handle input and generate responses
 def handle_input():
-    input_text = st.session_state.input_text.strip()
+    # Safely retrieve input text, default to an empty string if it's None
+    input_text = st.session_state.get("input_text", "").strip()
     if input_text:
         # Store the original input for display purposes
         original_input = input_text
