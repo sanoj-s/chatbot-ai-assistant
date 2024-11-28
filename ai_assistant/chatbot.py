@@ -51,25 +51,31 @@ def handle_input(input_text):
 st.markdown(
     """
     <style>
-    .chat-message-user {
+    /* Align the user chat message to the right */
+    .user-chat-message {
         text-align: right;
         background-color: #e0f7fa; /* Light blue background for user messages */
         padding: 10px;
         border-radius: 15px;
         margin: 5px;
-        margin-left: auto; /* Pushes the message to the right */
         max-width: 70%; /* Prevents messages from stretching too far */
-        display: block;
+        margin-left: auto; /* Push message to the right */
     }
-    .chat-message-assistant {
+    /* Align the assistant chat message to the left */
+    .assistant-chat-message {
         text-align: left;
         background-color: #f1f1f1; /* Light gray background for assistant messages */
         padding: 10px;
         border-radius: 15px;
         margin: 5px;
-        margin-right: auto; /* Pushes the message to the left */
         max-width: 70%; /* Prevents messages from stretching too far */
-        display: block;
+        margin-right: auto; /* Push message to the left */
+    }
+    /* Align the user icon to the right */
+    .user-chat-icon {
+        text-align: right;
+        display: flex;
+        justify-content: flex-end;
     }
     </style>
     """,
@@ -83,10 +89,13 @@ st.caption("Bot can make mistakes. Review the response prior to use.")
 for role, message in st.session_state.conversation_history:
     if role == "user":
         with st.chat_message(role):
-            st.markdown(f"<div class='chat-message-user'>{message}</div>", unsafe_allow_html=True)
+            # Use CSS classes for user messages
+            st.markdown(f"<div class='user-chat-icon'>👤</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='user-chat-message'>{message}</div>", unsafe_allow_html=True)
     elif role == "assistant":
         with st.chat_message(role):
-            st.markdown(f"<div class='chat-message-assistant'>{message}</div>", unsafe_allow_html=True)
+            # Use CSS classes for assistant messages
+            st.markdown(f"<div class='assistant-chat-message'>{message}</div>", unsafe_allow_html=True)
 
 # Handle user input using st.chat_input
 user_input = st.chat_input("How can I help you today?")
@@ -97,7 +106,8 @@ if user_input:
     for role, message in st.session_state.conversation_history[-2:]:
         if role == "user":
             with st.chat_message(role):
-                st.markdown(f"<div class='chat-message-user'>{message}</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='user-chat-icon'>👤</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='user-chat-message'>{message}</div>", unsafe_allow_html=True)
         elif role == "assistant":
             with st.chat_message(role):
-                st.markdown(f"<div class='chat-message-assistant'>{message}</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='assistant-chat-message'>{message}</div>", unsafe_allow_html=True)
