@@ -48,6 +48,32 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+st.markdown(
+    """
+    <style>
+    .response-container {
+        max-height: 300px; /* Set the desired height */
+        overflow-y: auto; /* Add vertical scrolling */
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+    .response-container::-webkit-scrollbar {
+        width: 8px;
+    }
+    .response-container::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+    }
+    .response-container::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # Page setup
 st.logo("./bot.png")
 st.title("Generate your manual test cases...")
@@ -110,12 +136,14 @@ st.text_input(
 
 # Display conversation history in reverse chronological order (latest first)
 if st.session_state.conversation_history:
+    st.markdown('<div class="response-container">', unsafe_allow_html=True)  # Start scrollable div
     for pair in reversed(st.session_state.conversation_history):
         if pair[0] == "user":
             st.markdown(f"<span style='color:blue;'>**You:** {pair[1]}</span>", unsafe_allow_html=True)
         elif pair[0] == "assistant":
             st.markdown(f"<span style='color:green;'>**Bot:**</span>", unsafe_allow_html=True)
             st.markdown(f"```markdown\n{pair[1]}\n```")
+    st.markdown('</div>', unsafe_allow_html=True)  # End scrollable div
 
 # Add a download button for test cases only if the last bot response is not the warning message
 if st.session_state.conversation_history and not st.session_state.conversation_history[-1][1].startswith("Sorry, your input must start"):
