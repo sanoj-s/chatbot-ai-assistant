@@ -49,6 +49,7 @@ def handle_input(input_text):
 
 # Display the conversation using st.chat_message
 st.title("I'm here to help you...")
+st.caption("Bot can make mistakes. Review the response prior to use.")
 for role, message in st.session_state.conversation_history:
     with st.chat_message(role):
         st.markdown(message)
