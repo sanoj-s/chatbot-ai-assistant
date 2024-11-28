@@ -65,8 +65,7 @@ if "input_text" not in st.session_state:
 
 # Callback function to handle input and generate responses
 def handle_input():
-    # Safely retrieve input text, default to an empty string if it's None
-    input_text = st.session_state.get("input_text", "").strip()
+    input_text = st.session_state.input_text.strip()
     if input_text:
         # Store the original input for display purposes
         original_input = input_text
@@ -104,10 +103,12 @@ def handle_input():
         # Clear the input field
         st.session_state.input_text = ""
 
-# Create the chat input field with callback
-st.session_state.input_text = st.chat_input(
-    "Describe the test scenario (e.g., 'Login functionality')",
-    on_submit=handle_input,
+# Create the input field with callback
+st.text_input(
+    "",
+    key="input_text",
+    on_change=handle_input,
+    placeholder="Describe the test scenario (e.g., 'Login functionality')",
 )
 
 # Display conversation history with the latest messages at the top
@@ -147,7 +148,7 @@ if st.session_state.conversation_history:
 
 # Add a download button for test cases only if the last bot response is not the warning message
 if st.session_state.conversation_history and not st.session_state.conversation_history[-1][1].startswith("Sorry, your input must start"):
-    formatted_test_cases = "\n\n".join([  
+    formatted_test_cases = "\n\n".join([
         f"**You:** {pair[1]}\n**Bot:** {response[1]}"
         for pair, response in zip(st.session_state.conversation_history, st.session_state.conversation_history[1:])
         if pair[0] == "user" and response[0] == "assistant"
