@@ -112,30 +112,37 @@ st.text_input(
 
 # Display conversation history in reverse chronological order (latest first)
 if st.session_state.conversation_history:
-    for pair in reversed(st.session_state.conversation_history):
-        if pair[0] == "user":
-            st.markdown(
-                f"""
-                <div style="text-align: right; margin: 10px 0;">
-                    <div style="background-color: #016580; color: white; padding: 10px; border-radius: 8px; display: inline-block; max-width: 80%;">
-                        You: {pair[1]}
+    for i in range(0, len(st.session_state.conversation_history), 2):
+        if i + 1 < len(st.session_state.conversation_history):  # Check if there is a pair
+            user_message = st.session_state.conversation_history[i]
+            assistant_message = st.session_state.conversation_history[i + 1]
+            
+            # Display "You:" message first
+            if user_message[0] == "user":
+                st.markdown(
+                    f"""
+                    <div style="text-align: right; margin: 10px 0;">
+                        <div style="background-color: #016580; color: white; padding: 10px; border-radius: 8px; display: inline-block; max-width: 80%;">
+                            You: {user_message[1]}
+                        </div>
                     </div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-        elif pair[0] == "assistant":
-            st.markdown(
-                f"""
-                <div style="text-align: left; margin: 10px 0;">
-                    <div style="color: green; font-weight: bold; margin-bottom: 5px;">Bot:</div>
-                    <div style="background-color: #f4f4f4; border-radius: 8px; padding: 10px;">
-                        {pair[1]}
+                    """,
+                    unsafe_allow_html=True,
+                )
+            
+            # Then display "Bot:" message
+            if assistant_message[0] == "assistant":
+                st.markdown(
+                    f"""
+                    <div style="text-align: left; margin: 10px 0;">
+                        <div style="color: green; font-weight: bold; margin-bottom: 5px;">Bot:</div>
+                        <div style="background-color: #f4f4f4; border-radius: 8px; padding: 10px;">
+                            {assistant_message[1]}
+                        </div>
                     </div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+                    """,
+                    unsafe_allow_html=True,
+                )
 
 # Add a download button for test cases only if the last bot response is not the warning message
 if st.session_state.conversation_history and not st.session_state.conversation_history[-1][1].startswith("Sorry, your input must start"):
