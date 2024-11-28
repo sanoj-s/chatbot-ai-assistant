@@ -116,11 +116,10 @@ if st.session_state.conversation_history:
         if pair[0] == "user":
             st.markdown(
                 f"""
-                <div style="text-align: right; margin: 10px 0;">
-                    <span style="background-color: #016580; color: white; font-weight: bold; padding: 5px 10px; border-radius: 5px;">
-                        You:
-                    </span>
-                    <span style="color: black; margin-left: 5px;">{pair[1]}</span>
+                <div style="text-align: left; margin: 10px 0;">
+                    <div style="background-color: #016580; color: white; font-weight: bold; padding: 10px; border-radius: 8px; display: inline-block; max-width: 80%;">
+                        You: {pair[1]}
+                    </div>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -129,10 +128,10 @@ if st.session_state.conversation_history:
             st.markdown(
                 f"""
                 <div style="text-align: left; margin: 10px 0;">
-                    <span style="color: green; font-weight: bold;">Bot:</span>
-                </div>
-                <div style="background-color: #f4f4f4; border-radius: 5px; padding: 10px;">
-                    {pair[1]}
+                    <div style="color: green; font-weight: bold; margin-bottom: 5px;">Bot:</div>
+                    <div style="background-color: #f4f4f4; border-radius: 8px; padding: 10px;">
+                        {pair[1]}
+                    </div>
                 </div>
                 """,
                 unsafe_allow_html=True,
