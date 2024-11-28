@@ -106,7 +106,7 @@ def handle_input():
 # Create the input field with callback
 st.chat_input(
     "",
-    key="input_text",
+    key="chat_input",
     on_change=handle_input,
     placeholder="Describe the test scenario (e.g., 'Login functionality')",
 )
