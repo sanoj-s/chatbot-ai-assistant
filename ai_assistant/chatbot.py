@@ -47,10 +47,15 @@ def handle_input(input_text):
         except Exception as e:
             st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
 
-# Add custom CSS for alignment
+# Add custom CSS for alignment and hiding default icons
 st.markdown(
     """
     <style>
+    /* Hide default Streamlit chat icons */
+    .stChatMessage .stMarkdown p img {
+        display: none; /* Hides all built-in icons */
+    }
+
     /* Align the user chat message to the right */
     .user-chat-message {
         text-align: right;
@@ -60,7 +65,9 @@ st.markdown(
         margin: 5px;
         max-width: 70%; /* Prevents messages from stretching too far */
         margin-left: auto; /* Push message to the right */
+        display: inline-block; /* Keeps the message bubble concise */
     }
+
     /* Align the assistant chat message to the left */
     .assistant-chat-message {
         text-align: left;
@@ -70,12 +77,14 @@ st.markdown(
         margin: 5px;
         max-width: 70%; /* Prevents messages from stretching too far */
         margin-right: auto; /* Push message to the left */
+        display: inline-block;
     }
+
     /* Align the user icon to the right */
     .user-chat-icon {
         text-align: right;
-        display: flex;
-        justify-content: flex-end;
+        margin-left: auto; /* Pushes icon to the right */
+        margin-bottom: 5px;
     }
     </style>
     """,
@@ -89,12 +98,12 @@ st.caption("Bot can make mistakes. Review the response prior to use.")
 for role, message in st.session_state.conversation_history:
     if role == "user":
         with st.chat_message(role):
-            # Use CSS classes for user messages
+            # Add a custom user icon to the right
             st.markdown(f"<div class='user-chat-icon'>👤</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='user-chat-message'>{message}</div>", unsafe_allow_html=True)
     elif role == "assistant":
         with st.chat_message(role):
-            # Use CSS classes for assistant messages
+            # Use a class for assistant messages
             st.markdown(f"<div class='assistant-chat-message'>{message}</div>", unsafe_allow_html=True)
 
 # Handle user input using st.chat_input
