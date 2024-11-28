@@ -85,13 +85,15 @@ def handle_input():
             # Create a dynamic prompt from conversation history
             modified_prompt = ChatPromptTemplate.from_messages(chat_history)
             modified_chain = modified_prompt | llm
-
+        
             # Get the response
             response = modified_chain.invoke({"question": input_text})
             content = getattr(response, "content", None) or response.get("content", None)
-
+        
             if content:
-                st.session_state.conversation_history.append(("assistant", content))
+                # Add "Generated results for <input_text>" as the first line
+                formatted_content = f"Generated results for **{original_input}**\n\n{content}"
+                st.session_state.conversation_history.append(("assistant", formatted_content))
             else:
                 st.session_state.conversation_history.append(("assistant", "No valid response received."))
         except Exception as e:
