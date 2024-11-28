@@ -47,64 +47,12 @@ def handle_input(input_text):
         except Exception as e:
             st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
 
-# Add custom CSS for alignment and hiding default icons
-st.markdown(
-    """
-    <style>
-    /* Hide default Streamlit chat icons */
-    .stChatMessage .stMarkdown p img {
-        display: none; /* Hides all built-in icons */
-    }
-
-    /* Align the user chat message to the right */
-    .user-chat-message {
-        text-align: right;
-        background-color: #e0f7fa; /* Light blue background for user messages */
-        padding: 10px;
-        border-radius: 15px;
-        margin: 5px;
-        max-width: 70%; /* Prevents messages from stretching too far */
-        margin-left: auto; /* Push message to the right */
-        display: inline-block; /* Keeps the message bubble concise */
-    }
-
-    /* Align the assistant chat message to the left */
-    .assistant-chat-message {
-        text-align: left;
-        background-color: #f1f1f1; /* Light gray background for assistant messages */
-        padding: 10px;
-        border-radius: 15px;
-        margin: 5px;
-        max-width: 70%; /* Prevents messages from stretching too far */
-        margin-right: auto; /* Push message to the left */
-        display: inline-block;
-    }
-
-    /* Align the user icon to the right */
-    .user-chat-icon {
-        text-align: right;
-        margin-left: auto; /* Pushes icon to the right */
-        margin-bottom: 5px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
 # Display the conversation using st.chat_message
 st.title("I'm here to help you...")
 st.caption("Bot can make mistakes. Review the response prior to use.")
-
 for role, message in st.session_state.conversation_history:
-    if role == "user":
-        with st.chat_message(role):
-            # Add a custom user icon to the right
-            st.markdown(f"<div class='user-chat-icon'>👤</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='user-chat-message'>{message}</div>", unsafe_allow_html=True)
-    elif role == "assistant":
-        with st.chat_message(role):
-            # Use a class for assistant messages
-            st.markdown(f"<div class='assistant-chat-message'>{message}</div>", unsafe_allow_html=True)
+    with st.chat_message(role):
+        st.markdown(message)
 
 # Handle user input using st.chat_input
 user_input = st.chat_input("How can I help you today?")
@@ -113,10 +61,5 @@ if user_input:
 
     # Automatically display the assistant's response
     for role, message in st.session_state.conversation_history[-2:]:
-        if role == "user":
-            with st.chat_message(role):
-                st.markdown(f"<div class='user-chat-icon'>👤</div>", unsafe_allow_html=True)
-                st.markdown(f"<div class='user-chat-message'>{message}</div>", unsafe_allow_html=True)
-        elif role == "assistant":
-            with st.chat_message(role):
-                st.markdown(f"<div class='assistant-chat-message'>{message}</div>", unsafe_allow_html=True)
+        with st.chat_message(role):
+            st.markdown(message)
