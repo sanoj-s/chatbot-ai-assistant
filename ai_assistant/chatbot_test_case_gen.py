@@ -68,7 +68,7 @@ def handle_input():
     if input_text:
         # Ensure the input starts with the required prefix
         if not input_text.lower().startswith("generate test cases"):
-            input_text = f"Generate test cases {input_text}"
+            input_text = f"Generate test cases {input_text} with steps"
 
         # Add the user's input to conversation history
         st.session_state.conversation_history.append(("user", input_text))
@@ -102,7 +102,7 @@ st.text_input(
     "",
     key="input_text",
     on_change=handle_input,
-    placeholder="Describe the test scenario (e.g., 'Generate test cases for login functionality')",
+    placeholder="Describe the test scenario (e.g., 'Login functionality')",
 )
 
 # Display conversation history in reverse chronological order (latest first)
