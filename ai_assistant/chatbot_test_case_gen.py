@@ -117,7 +117,7 @@ if st.session_state.conversation_history:
             st.markdown(
                 f"""
                 <div style="text-align: right; margin: 10px 0;">
-                    <div style="background-color: #016580; color: white; font-weight: bold; padding: 10px; border-radius: 8px; display: inline-block; max-width: 80%;">
+                    <div style="background-color: #016580; color: white; padding: 10px; border-radius: 8px; display: inline-block; max-width: 80%;">
                         You: {pair[1]}
                     </div>
                 </div>
