@@ -20,6 +20,7 @@ generator_embeddings = LangchainEmbeddingsWrapper(OpenAIEmbeddings())
 generator = TestsetGenerator(llm=generator_llm, embedding_model=generator_embeddings)
 
 # Streamlit UI
+st.logo("./bot.png")
 st.title("Test Datasets Generator")
 st.caption("To generate synthetic test datasets for evaluating your AI applications")
 
@@ -27,6 +28,23 @@ st.caption("To generate synthetic test datasets for evaluating your AI applicati
 input_method = st.radio("Choose your input method:", ("Enter URL", "Upload a File"))
 
 if input_method == "Enter URL":
+    # Add a border to the URL input field using custom CSS
+    st.markdown("""
+        <style>
+            .stTextInput > label {
+                font-size: 16px;
+                color: #333;
+            }
+            .stTextInput > div > input {
+                border: 2px solid #4CAF50;  /* Green border color */
+                border-radius: 5px;         /* Rounded corners */
+                padding: 10px;
+                font-size: 16px;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # URL input field
     url = st.text_input("Enter the URL:")
     if st.button("Generate Test Data"):
         if url:
