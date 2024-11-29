@@ -27,6 +27,11 @@ st.caption("To generate synthetic test datasets for evaluating your AI applicati
 # Option to choose input method
 input_method = st.radio("Choose your input method:", ("Enter URL", "Upload a File"))
 
+# Allow user to specify the number of test datasets to generate
+num_test_datasets = st.slider(
+    "Select the number of test datasets:", min_value=1, max_value=20, value=5, step=1
+)
+
 if input_method == "Enter URL":
     # Add a border to the URL input field using custom CSS
     st.markdown("""
@@ -55,7 +60,7 @@ if input_method == "Enter URL":
             try:
                 loader = WebBaseLoader(url)
                 documents = loader.load()
-                dataset = generator.generate_with_langchain_docs(documents, testset_size=5)
+                dataset = generator.generate_with_langchain_docs(documents, testset_size=num_test_datasets)
                 df = dataset.to_pandas()
 
                 st.success("Test data generated successfully!")
@@ -97,7 +102,7 @@ elif input_method == "Upload a File":
                     st.stop()
 
                 documents = loader.load()
-                dataset = generator.generate_with_langchain_docs(documents, testset_size=5)
+                dataset = generator.generate_with_langchain_docs(documents, testset_size=num_test_datasets)
                 df = dataset.to_pandas()
 
                 st.success("Test data generated successfully!")
