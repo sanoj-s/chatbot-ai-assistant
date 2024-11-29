@@ -2,6 +2,7 @@ import os
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 import streamlit as st
+import json  # For saving the conversation history in JSON format
 
 # Set up OpenAI API key
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
@@ -73,3 +74,22 @@ if user_input:
     for role, message in st.session_state.conversation_history[-2:]:
         with st.chat_message(role):
             st.markdown(message)
+
+# Add Download Button
+if st.session_state.conversation_history:
+    # Convert conversation history to a formatted text
+    conversation_text = "\n".join([f"{role}: {message}" for role, message in st.session_state.conversation_history])
+    st.download_button(
+        label="Download Test Cases",
+        data=conversation_text,
+        file_name="test_cases.txt",
+        mime="text/plain",
+    )
+
+# Add Share Icon Placeholder
+share_icon_html = """
+<a href="https://your-sharing-url-or-functionality" target="_blank" title="Share Conversation">
+    <img src="https://img.icons8.com/material-outlined/24/000000/share.png"/>
+</a>
+"""
+st.markdown(share_icon_html, unsafe_allow_html=True)
