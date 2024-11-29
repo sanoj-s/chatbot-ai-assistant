@@ -87,7 +87,7 @@ elif input_method == "Upload a File":
 
     # Add the slider to select the number of test datasets
     num_test_datasets = st.slider(
-        "Select the number of test datasets:", min_value=1, max_value=20, value=5, step=1
+        "Select the number of test datasets:", min_value=1, max_value=100, value=5, step=1
     )
 
     if st.button("Generate Test Data"):
