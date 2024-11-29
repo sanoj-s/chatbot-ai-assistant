@@ -85,11 +85,3 @@ if st.session_state.conversation_history:
         file_name="test_cases.txt",
         mime="text/plain",
     )
-
-# Add Share Icon Placeholder
-share_icon_html = """
-<a href="https://your-sharing-url-or-functionality" target="_blank" title="Share Conversation">
-    <img src="https://img.icons8.com/material-outlined/24/000000/share.png"/>
-</a>
-"""
-st.markdown(share_icon_html, unsafe_allow_html=True)
