@@ -51,7 +51,7 @@ def handle_input(input_text):
             content = getattr(response, "content", None) or response.get("content", None)
 
             if content:
-                formatted_content = f"Generated results for **{actual_text}**\n\n{content}"
+                formatted_content = f"Generated test cases for **{actual_text}**\n\n{content}"
                 st.session_state.conversation_history.append(("assistant", formatted_content))
             else:
                 st.session_state.conversation_history.append(("assistant", "No valid response received."))
