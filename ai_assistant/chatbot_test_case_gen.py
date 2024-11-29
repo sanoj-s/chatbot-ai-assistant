@@ -28,6 +28,7 @@ if "conversation_history" not in st.session_state:
 # Function to handle input and update the conversation history
 def handle_input(input_text):
     if input_text:
+        actual_text = input_text
         # Add the user's input to conversation history
         st.session_state.conversation_history.append(("user", input_text))
 
@@ -50,7 +51,7 @@ def handle_input(input_text):
             content = getattr(response, "content", None) or response.get("content", None)
 
             if content:
-                formatted_content = f"Generated results for **{input_text}**\n\n{content}"
+                formatted_content = f"Generated results for **{actual_text}**\n\n{content}"
                 st.session_state.conversation_history.append(("assistant", formatted_content))
             else:
                 st.session_state.conversation_history.append(("assistant", "No valid response received."))
