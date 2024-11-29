@@ -11,6 +11,9 @@ prompt = ChatPromptTemplate.from_messages(
     [("system", "You are a helpful assistant. Please respond to the questions.")]
 )
 
+#page setup
+st.logo("./bot.png")
+
 # Initialize the model
 llm = ChatOpenAI(model="gpt-3.5-turbo")
 
