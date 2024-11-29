@@ -20,7 +20,8 @@ generator_embeddings = LangchainEmbeddingsWrapper(OpenAIEmbeddings())
 generator = TestsetGenerator(llm=generator_llm, embedding_model=generator_embeddings)
 
 # Streamlit UI
-st.title("Test Data Generator")
+st.title("Test Datasets Generator")
+st.caption("To generate synthetic test datasets for evaluating your AI applications")
 
 # Option to choose input method
 input_method = st.radio("Choose your input method:", ("Enter URL", "Upload a File"))
