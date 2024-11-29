@@ -31,15 +31,22 @@ if input_method == "Enter URL":
     # Add a border to the URL input field using custom CSS
     st.markdown("""
         <style>
+            /* Style the label of the text input */
             .stTextInput > label {
                 font-size: 16px;
                 color: #333;
             }
+            /* Apply a green border and padding to the input field */
             .stTextInput > div > input {
                 border: 2px solid #4CAF50;  /* Green border color */
                 border-radius: 5px;         /* Rounded corners */
                 padding: 10px;
                 font-size: 16px;
+            }
+            /* Add a shadow effect to the input field when focused */
+            .stTextInput > div > input:focus {
+                box-shadow: 0 0 5px 2px rgba(76, 175, 80, 0.5);  /* Green shadow */
+                border-color: #388E3C;  /* Darker green */
             }
         </style>
     """, unsafe_allow_html=True)
