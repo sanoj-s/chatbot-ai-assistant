@@ -7,3 +7,4 @@ nltk
 unstructured
 RapidFuzz
 python-docx
+networkx
