@@ -27,11 +27,6 @@ st.caption("To generate synthetic test datasets for evaluating your AI applicati
 # Option to choose input method
 input_method = st.radio("Choose your input method:", ("Enter URL", "Upload a File"))
 
-# Allow user to specify the number of test datasets to generate
-num_test_datasets = st.slider(
-    "Select the number of test datasets:", min_value=1, max_value=100, value=5, step=1
-)
-
 if input_method == "Enter URL":
     # Add a border to the URL input field using custom CSS
     st.markdown("""
@@ -55,6 +50,12 @@ if input_method == "Enter URL":
 
     # URL input field
     url = st.text_input("Enter the URL:")
+
+    # Add the slider to select the number of test datasets
+    num_test_datasets = st.slider(
+        "Select the number of test datasets:", min_value=1, max_value=20, value=5, step=1
+    )
+
     if st.button("Generate Test Data"):
         if url:
             try:
@@ -83,6 +84,12 @@ elif input_method == "Upload a File":
     uploaded_file = st.file_uploader(
         "Upload a file (docx, xlsx):", type=["docx", "xlsx"]
     )
+
+    # Add the slider to select the number of test datasets
+    num_test_datasets = st.slider(
+        "Select the number of test datasets:", min_value=1, max_value=20, value=5, step=1
+    )
+
     if st.button("Generate Test Data"):
         if uploaded_file:
             try:
