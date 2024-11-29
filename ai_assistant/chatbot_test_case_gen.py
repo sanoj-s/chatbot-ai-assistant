@@ -64,7 +64,7 @@ if st.session_state.conversation_history:
             st.markdown(message)
 
 # Use st.chat_input to handle new user input
-user_input = st.chat_input("Describe the test scenario (e.g., 'Login functionality')")
+user_input = st.chat_input("Describe the test scenario")
 if user_input:
     handle_input(user_input)
 
