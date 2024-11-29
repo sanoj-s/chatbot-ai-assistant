@@ -29,7 +29,7 @@ input_method = st.radio("Choose your input method:", ("Enter URL", "Upload a Fil
 
 # Allow user to specify the number of test datasets to generate
 num_test_datasets = st.slider(
-    "Select the number of test datasets:", min_value=1, max_value=20, value=5, step=1
+    "Select the number of test datasets:", min_value=1, max_value=100, value=5, step=1
 )
 
 if input_method == "Enter URL":
