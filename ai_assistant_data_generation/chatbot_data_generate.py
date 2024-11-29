@@ -22,7 +22,7 @@ generator = TestsetGenerator(llm=generator_llm, embedding_model=generator_embedd
 # Streamlit UI
 st.logo("./bot.png")
 st.title("Test Datasets Generator")
-st.caption("To generate synthetic test datasets for evaluating your AI applications")
+st.caption("To generate synthetic test datasets for evaluating your Chatbot AI applications")
 
 # Option to choose input method
 input_method = st.radio("Choose your input method:", ("Enter URL", "Upload a File"))
