@@ -4,10 +4,8 @@ import tempfile
 from langchain_community.document_loaders import (
     WebBaseLoader,
     UnstructuredExcelLoader,
-    UnstructuredWordDocumentLoader, UnstructuredPDFLoader,
+    UnstructuredWordDocumentLoader,
 )
-from pdfminer.highlevel import extract_pages
-from pdfminer.layout import LAParams
 from ragas.testset import TestsetGenerator
 from ragas.llms import LangchainLLMWrapper
 from ragas.embeddings import LangchainEmbeddingsWrapper
@@ -84,7 +82,7 @@ if input_method == "Enter URL":
 
 elif input_method == "Upload a File":
     uploaded_file = st.file_uploader(
-        "Upload a file (docx, xlsx, pdf):", type=["docx", "xlsx", "pdf"]
+        "Upload a file (docx, xlsx):", type=["docx", "xlsx"]
     )
 
     # Add the slider to select the number of test datasets
@@ -106,12 +104,6 @@ elif input_method == "Upload a File":
                     loader = UnstructuredWordDocumentLoader(temp_file_path)
                 elif file_extension == "xlsx":
                     loader = UnstructuredExcelLoader(temp_file_path)
-                elif file_extension == "pdf":
-                    pages = extract_pages(temp_file_path)
-                    text = ''
-                    for page in pages:
-                        text += page.get_text()
-                    loader = text
                 else:
                     st.error("Unsupported file format.")
                     st.stop()

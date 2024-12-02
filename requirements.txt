@@ -9,4 +9,3 @@ RapidFuzz
 python-docx
 networkx
 openpyxl
-pdfminer
