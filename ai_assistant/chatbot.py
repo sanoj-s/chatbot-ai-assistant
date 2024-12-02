@@ -61,7 +61,7 @@ st.caption("Bot can make mistakes. Review the response prior to use.")
 # Create a new chat icon using st.button
 col1, col2 = st.columns([1, 9])  # Adjust column width for alignment
 with col1:
-    if st.button("🗑️ New Chat"):
+    if st.button("New Chat"):
         clear_conversation()
 with col2:
     st.chat_input("How can I help you today?")
