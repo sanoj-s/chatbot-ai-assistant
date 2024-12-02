@@ -51,12 +51,10 @@ def handle_input(input_text):
         except Exception as e:
             st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
 
-
 # Helper function to load images as base64
 def get_image_as_base64(image_path):
     with open(image_path, "rb") as f:
         return base64.b64encode(f.read()).decode()
-
 
 # Add bot and refresh icons
 bot_icon_base64 = get_image_as_base64("./bot.png")
@@ -75,17 +73,29 @@ with col1:
         unsafe_allow_html=True,
     )
 with col2:
-    if st.button("", key="refresh_button", help="Refresh Chat"):
+    if st.button(
+        f'<img src="data:image/png;base64,{refresh_icon_base64}" alt="Refresh Icon" style="width: 30px; height: 30px;">',
+        key="refresh_button",
+        help="Refresh Chat",
+        unsafe_allow_html=True,
+    ):
+        # Save the current conversation to saved_conversations
         if st.session_state.conversation_history:
+            first_user_message = next(
+                (msg for role, msg in st.session_state.conversation_history if role == "user"), 
+                "Conversation"
+            )
             st.session_state.saved_conversations.append(
-                {"timestamp": st.session_state.get("timestamp", len(st.session_state.saved_conversations) + 1), 
-                "conversation": st.session_state.conversation_history})
+                {"title": first_user_message, "conversation": st.session_state.conversation_history}
+            )
+        # Clear the current conversation
         st.session_state.conversation_history = []
 
 # Display saved conversations in the sidebar
 st.sidebar.header("Saved Conversations")
 for idx, saved_conversation in enumerate(st.session_state.saved_conversations):
-    with st.sidebar.expander(f"Conversation {idx + 1}"):
+    title = saved_conversation["title"]
+    with st.sidebar.expander(f"{title}"):
         for role, message in saved_conversation["conversation"]:
             st.markdown(f"**{role.capitalize()}**: {message}")
 
