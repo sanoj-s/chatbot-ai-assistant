@@ -86,7 +86,7 @@ with col2:
         st.session_state.conversation_history = []
 
 # Display saved conversations in the sidebar
-st.sidebar.header("Saved Conversations")
+st.sidebar.header("Recent Conversations")
 for idx, saved_conversation in enumerate(reversed(st.session_state.saved_conversations)):
     title = saved_conversation["title"]
     with st.sidebar.expander(f"{title}"):
