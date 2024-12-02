@@ -2,7 +2,8 @@ streamlit
 langchain
 langchain_openai
 xlsxwriter
-PyPDF2
+PyPDF2 
+pillow 
 pytesseract
 ragas
 nltk
