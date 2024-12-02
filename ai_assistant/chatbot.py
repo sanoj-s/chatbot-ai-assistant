@@ -73,41 +73,17 @@ with col1:
         unsafe_allow_html=True,
     )
 with col2:
-    # Use Markdown for the refresh button with a clickable image
-    st.markdown(
-        f"""
-        <button 
-            onclick="window.location.reload();" 
-            style="
-                background: none; 
-                border: none; 
-                cursor: pointer;
-                display: flex; 
-                justify-content: center; 
-                align-items: center;
-                padding: 10px;
-            "
-        >
-            <img src="data:image/png;base64,{refresh_icon_base64}" alt="Refresh Icon" style="width: 30px; height: 30px;">
-        </button>
-        """,
-        unsafe_allow_html=True,
-    )
-
-# Save the current conversation when refresh is clicked
-if "reload_trigger" not in st.session_state:
-    st.session_state.reload_trigger = False
-if st.session_state.reload_trigger:
-    if st.session_state.conversation_history:
-        first_user_message = next(
-            (msg for role, msg in st.session_state.conversation_history if role == "user"), 
-            "Conversation"
-        )
-        st.session_state.saved_conversations.append(
-            {"title": first_user_message, "conversation": st.session_state.conversation_history}
-        )
-    st.session_state.conversation_history = []
-    st.session_state.reload_trigger = False
+    if st.button("🔄 Refresh", key="refresh_button", help="Save and Refresh"):
+        # Save the current conversation and reset
+        if st.session_state.conversation_history:
+            first_user_message = next(
+                (msg for role, msg in st.session_state.conversation_history if role == "user"),
+                "Conversation",
+            )
+            st.session_state.saved_conversations.append(
+                {"title": first_user_message, "conversation": st.session_state.conversation_history}
+            )
+        st.session_state.conversation_history = []
 
 # Display saved conversations in the sidebar
 st.sidebar.header("Saved Conversations")
