@@ -56,14 +56,14 @@ def handle_input(input_text):
 st.markdown(
     """
     <div style="display: flex; align-items: center; gap: 10px;">
-        <img src="https://via.placeholder.com/40" alt="Bot Icon" style="border-radius: 50%; width: 40px; height: 40px;">
+        <img src="/bot.png" alt="Bot Icon" style="border-radius: 50%; width: 40px; height: 40px;">
         <h1 style="margin: 0;">I'm here to help you...</h1>
     </div>
     """,
     unsafe_allow_html=True,
 )
 
-st.title("I'm here to help you...")
+#st.title("I'm here to help you...")
 st.caption("Bot can make mistakes. Review the response prior to use.")
 for role, message in st.session_state.conversation_history:
     with st.chat_message(role):
