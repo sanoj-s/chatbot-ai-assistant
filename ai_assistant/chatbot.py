@@ -19,6 +19,8 @@ llm = ChatOpenAI(model="gpt-4o")
 if "conversation_history" not in st.session_state:
     st.session_state.conversation_history = []
 
+if "saved_conversations" not in st.session_state:
+    st.session_state.saved_conversations = []
 
 # Function to handle input and update the conversation history
 def handle_input(input_text):
@@ -50,24 +52,47 @@ def handle_input(input_text):
             st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
 
 
-# Display the conversation using st.chat_message
+# Helper function to load images as base64
 def get_image_as_base64(image_path):
     with open(image_path, "rb") as f:
         return base64.b64encode(f.read()).decode()
-        
+
+
+# Add bot and refresh icons
 bot_icon_base64 = get_image_as_base64("./bot.png")
+refresh_icon_base64 = get_image_as_base64("./refresh.png")
 
-st.markdown(
-    f"""
-    <div style="display: flex; align-items: center; gap: 10px;">
-        <img src="data:image/png;base64,{bot_icon_base64}" alt="Bot Icon" style="border-radius: 50%; width: 60px; height: 60px;">
-        <h1 style="margin: 0;">I'm here to help you...</h1>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+# Display the header with the refresh icon
+col1, col2 = st.columns([0.9, 0.1])
+with col1:
+    st.markdown(
+        f"""
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="data:image/png;base64,{bot_icon_base64}" alt="Bot Icon" style="border-radius: 50%; width: 60px; height: 60px;">
+            <h1 style="margin: 0;">I'm here to help you...</h1>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+with col2:
+    if st.button("", key="refresh_button", help="Refresh Chat"):
+        if st.session_state.conversation_history:
+            st.session_state.saved_conversations.append(
+                {"timestamp": st.session_state.get("timestamp", len(st.session_state.saved_conversations) + 1), 
+                "conversation": st.session_state.conversation_history})
+        st.session_state.conversation_history = []
 
+# Display saved conversations in the sidebar
+st.sidebar.header("Saved Conversations")
+for idx, saved_conversation in enumerate(st.session_state.saved_conversations):
+    with st.sidebar.expander(f"Conversation {idx + 1}"):
+        for role, message in saved_conversation["conversation"]:
+            st.markdown(f"**{role.capitalize()}**: {message}")
+
+# Caption for the bot
 st.caption("Bot can make mistakes. Review the response prior to use.")
+
+# Display the conversation
 for role, message in st.session_state.conversation_history:
     with st.chat_message(role):
         st.markdown(message)
