@@ -3,6 +3,7 @@ langchain
 langchain_openai
 xlsxwriter
 PyPDF2
+pytesseract
 ragas
 nltk
 unstructured
