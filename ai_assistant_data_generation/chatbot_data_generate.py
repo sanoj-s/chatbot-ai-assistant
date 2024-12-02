@@ -6,6 +6,8 @@ from langchain_community.document_loaders import (
     UnstructuredExcelLoader,
     UnstructuredWordDocumentLoader, UnstructuredPDFLoader,
 )
+from pdfminer.highlevel import extract_pages
+from pdfminer.layout import LAParams
 from ragas.testset import TestsetGenerator
 from ragas.llms import LangchainLLMWrapper
 from ragas.embeddings import LangchainEmbeddingsWrapper
@@ -105,7 +107,11 @@ elif input_method == "Upload a File":
                 elif file_extension == "xlsx":
                     loader = UnstructuredExcelLoader(temp_file_path)
                 elif file_extension == "pdf":
-                    loader = UnstructuredPDFLoader(temp_file_path)
+                    pages = extract_pages(temp_file_path)
+                    text = ''
+                    for page in pages:
+                        text += page.get_text()
+                    loader = text
                 else:
                     st.error("Unsupported file format.")
                     st.stop()
