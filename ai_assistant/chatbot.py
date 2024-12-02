@@ -15,7 +15,7 @@ prompt = ChatPromptTemplate.from_messages(
 st.logo("./bot.png")
 
 # Initialize the model
-llm = ChatOpenAI(model="gpt-3.5-turbo")
+llm = ChatOpenAI(model="gpt-4o")
 
 # Initialize session state
 if "conversation_history" not in st.session_state:
