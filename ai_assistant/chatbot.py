@@ -73,7 +73,7 @@ with col1:
         unsafe_allow_html=True,
     )
 with col2:
-    if st.button("🔄", key="refresh_button", help="Save and Refresh"):
+    if st.button("🔄", key="refresh_button", help="Refresh"):
         # Save the current conversation and reset
         if st.session_state.conversation_history:
             first_user_message = next(
@@ -86,7 +86,7 @@ with col2:
         st.session_state.conversation_history = []
 
 # Display saved conversations in the sidebar
-st.sidebar.header("Saved Conversations")
+st.sidebar.header("Recent Conversations")
 for idx, saved_conversation in enumerate(st.session_state.saved_conversations):
     title = saved_conversation["title"]
     with st.sidebar.expander(f"{title}"):
