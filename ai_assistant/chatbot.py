@@ -94,12 +94,6 @@ with col2:
         """,
         unsafe_allow_html=True,
     )
-    if st.button("", key="refresh_button", help="Refresh Chat"):
-        if st.session_state.conversation_history:
-            st.session_state.saved_conversations.append(
-                {"timestamp": st.session_state.get("timestamp", len(st.session_state.saved_conversations) + 1), 
-                "conversation": st.session_state.conversation_history})
-        st.session_state.conversation_history = []
 
 # Display saved conversations in the sidebar
 st.sidebar.header("Saved Conversations")
