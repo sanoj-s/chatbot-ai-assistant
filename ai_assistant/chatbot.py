@@ -12,7 +12,7 @@ prompt = ChatPromptTemplate.from_messages(
 )
 
 # page setup
-st.logo("./bot.png")
+# st.logo("./bot.png")
 
 # Initialize the model
 llm = ChatOpenAI(model="gpt-4o")
@@ -53,6 +53,16 @@ def handle_input(input_text):
 
 
 # Display the conversation using st.chat_message
+st.markdown(
+    """
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="./bot.png" alt="Bot Icon" style="border-radius: 50%; width: 40px; height: 40px;">
+        <h1 style="margin: 0;">I'm here to help you...</h1>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 st.title("I'm here to help you...")
 st.caption("Bot can make mistakes. Review the response prior to use.")
 for role, message in st.session_state.conversation_history:
