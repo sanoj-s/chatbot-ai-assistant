@@ -56,7 +56,7 @@ def handle_input(input_text):
 st.markdown(
     """
     <div style="display: flex; align-items: center; gap: 10px;">
-        <img src="./bot.png" alt="Bot Icon" style="border-radius: 50%; width: 40px; height: 40px;">
+        <img src="https://via.placeholder.com/40" alt="Bot Icon" style="border-radius: 50%; width: 40px; height: 40px;">
         <h1 style="margin: 0;">I'm here to help you...</h1>
     </div>
     """,
