@@ -119,7 +119,7 @@ for idx, saved_conversation in enumerate(reversed(st.session_state.saved_convers
         st.markdown(
             f"""
             <div style="text-align: right;">
-                <a href="data:text/plain;charset=utf-8,{urllib.parse.quote(export_all_conversations)}" download="{title.replace(' ', '_')}.txt">
+                <a href="data:text/plain;charset=utf-8,{urllib.parse.quote(conversation_text)}" download="{title.replace(' ', '_')}.txt">
                     <img src="data:image/png;base64,{download_icon_base64}" width="20" height="20" title="Download Conversation"/>
                 </a>
             </div>
