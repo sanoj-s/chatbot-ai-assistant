@@ -9,5 +9,4 @@ RapidFuzz
 python-docx
 networkx
 openpyxl
-PyMuPDF
-pdfminer
+pymupdf
