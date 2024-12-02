@@ -73,7 +73,7 @@ with col1:
         unsafe_allow_html=True,
     )
 with col2:
-    if st.button("🔄 Refresh", key="refresh_button", help="Save and Refresh"):
+    if st.button("🔄", key="refresh_button", help="Save and Refresh"):
         # Save the current conversation and reset
         if st.session_state.conversation_history:
             first_user_message = next(
