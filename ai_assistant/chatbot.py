@@ -11,6 +11,9 @@ prompt = ChatPromptTemplate.from_messages(
     [("system", "You are a helpful assistant. Please respond to the questions.")]
 )
 
+#page setup
+st.logo("./bot.png")
+
 # Initialize the model
 llm = ChatOpenAI(model="gpt-4o")
 
@@ -47,35 +50,19 @@ def handle_input(input_text):
         except Exception as e:
             st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
 
-# Page setup with bot icon and title
-col1, col2 = st.columns([1, 5])  # Adjust the width ratio as needed
-with col1:
-    st.image("./bot.png", use_column_width=True)  # Display the bot icon
-with col2:
-    st.title("I'm here to help you...")
-
-st.caption("Bot can make mistakes. Review the response prior to use.")
-
 # Display the conversation using st.chat_message
+st.title("I'm here to help you...")
+st.caption("Bot can make mistakes. Review the response prior to use.")
 for role, message in st.session_state.conversation_history:
     with st.chat_message(role):
         st.markdown(message)
 
-# Add a spacer to push content upwards
-st.write("<div style='flex-grow: 1;'></div>", unsafe_allow_html=True)
+# Handle user input using st.chat_input
+user_input = st.chat_input("How can I help you today?")
+if user_input:
+    handle_input(user_input)
 
-# Add the "New Chat" button and user input at the bottom
-col1, col2 = st.columns([1, 5])  # Adjust the width ratio as needed
-with col1:
-    if st.button("New Chat"):
-        st.session_state.conversation_history = []  # Reset conversation history
-
-with col2:
-    user_input = st.chat_input("How can I help you today?")
-    if user_input:
-        handle_input(user_input)
-
-        # Automatically display the assistant's response
-        for role, message in st.session_state.conversation_history[-2:]:
-            with st.chat_message(role):
-                st.markdown(message)
+    # Automatically display the assistant's response
+    for role, message in st.session_state.conversation_history[-2:]:
+        with st.chat_message(role):
+            st.markdown(message)
