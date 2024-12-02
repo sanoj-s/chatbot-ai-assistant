@@ -9,3 +9,4 @@ RapidFuzz
 python-docx
 networkx
 openpyxl
+PyMuPDF
