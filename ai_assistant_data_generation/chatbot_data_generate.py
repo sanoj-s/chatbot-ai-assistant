@@ -1,12 +1,10 @@
 import streamlit as st
 import os
 import tempfile
-import fitz
 from langchain_community.document_loaders import (
     WebBaseLoader,
     UnstructuredExcelLoader,
     UnstructuredWordDocumentLoader,
-    UnstructuredPDFLoader,
 )
 from ragas.testset import TestsetGenerator
 from ragas.llms import LangchainLLMWrapper
@@ -84,7 +82,7 @@ if input_method == "Enter URL":
 
 elif input_method == "Upload a File":
     uploaded_file = st.file_uploader(
-        "Upload a file (docx, xlsx, pdf):", type=["docx", "xlsx", "pdf"]
+        "Upload a file (docx, xlsx):", type=["docx", "xlsx"]
     )
 
     # Add the slider to select the number of test datasets
@@ -106,8 +104,6 @@ elif input_method == "Upload a File":
                     loader = UnstructuredWordDocumentLoader(temp_file_path)
                 elif file_extension == "xlsx":
                     loader = UnstructuredExcelLoader(temp_file_path)
-                elif file_extension == "pdf":
-                    loader = UnstructuredPDFLoader(temp_file_path)
                 else:
                     st.error("Unsupported file format.")
                     st.stop()
