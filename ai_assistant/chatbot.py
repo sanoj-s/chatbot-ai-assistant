@@ -60,9 +60,15 @@ for role, message in st.session_state.conversation_history:
 # Handle user input using st.chat_input
 user_input = st.chat_input("How can I help you today?")
 if user_input:
+    # Display the user's input immediately
+    st.session_state.conversation_history.append(("user", user_input))
+    with st.chat_message("user"):
+        st.markdown(user_input)
+
+    # Process the input to get the assistant's response
     handle_input(user_input)
 
     # Automatically display the assistant's response
-    for role, message in st.session_state.conversation_history[-2:]:
+    for role, message in st.session_state.conversation_history[-1:]:
         with st.chat_message(role):
             st.markdown(message)
