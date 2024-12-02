@@ -19,9 +19,6 @@ llm = ChatOpenAI(model="gpt-4o")
 if "conversation_history" not in st.session_state:
     st.session_state.conversation_history = []
 
-# Function to reset the conversation
-def reset_conversation():
-    st.session_state.conversation_history = []
 
 # Function to handle input and update the conversation history
 def handle_input(input_text):
@@ -52,76 +49,41 @@ def handle_input(input_text):
         except Exception as e:
             st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
 
-# Custom CSS for alignment
-st.markdown(
-    """
-    <style>
-        .input-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            position: fixed;
-            bottom: 10px;
-            width: 100%;
-            padding: 0 20px;
-            background: white;
-            z-index: 1000;
-        }
-        .new-chat-button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 15px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .new-chat-button:hover {
-            background-color: #0056b3;
-        }
-        .st-chat-input {
-            flex-grow: 1;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
 
-# Add a container for the input and the new chat button
+# Display the conversation using st.chat_message
+def get_image_as_base64(image_path):
+    with open(image_path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+        
+bot_icon_base64 = get_image_as_base64("./bot.png")
+
 st.markdown(
-    """
-    <div class="input-container">
-        <button class="new-chat-button" onclick="window.location.reload();">New Chat</button>
-        <div class="st-chat-input">
-            <!-- The chat input from Streamlit will render here -->
-        </div>
+    f"""
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="data:image/png;base64,{bot_icon_base64}" alt="Bot Icon" style="border-radius: 50%; width: 60px; height: 60px;">
+        <h1 style="margin: 0;">I'm here to help you...</h1>
     </div>
     """,
     unsafe_allow_html=True,
 )
 
-# Reset conversation when the user clicks "New Chat"
-if st.session_state.get("reset"):
-    reset_conversation()
-    st.session_state["reset"] = False
-
-# Display the conversation history
+st.caption("Bot can make mistakes. Review the response prior to use.")
 for role, message in st.session_state.conversation_history:
     with st.chat_message(role):
         st.markdown(message)
 
-# Handle user input
+# Handle user input using st.chat_input
 user_input = st.chat_input("How can I help you today?")
 if user_input:
-    # Add user input to conversation history
+    # Display the user's input immediately
     st.session_state.conversation_history.append(("user", user_input))
     with st.chat_message("user"):
         st.markdown(user_input)
 
-    # Process the input and generate a response
+    # Process the input to get the assistant's response
     handle_input(user_input)
 
-    # Display the assistant's response
+    # Automatically display the assistant's response
     for role, message in st.session_state.conversation_history[-1:]:
         with st.chat_message(role):
             st.markdown(message)
