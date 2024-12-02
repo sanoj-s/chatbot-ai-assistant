@@ -11,7 +11,7 @@ prompt = ChatPromptTemplate.from_messages(
     [("system", "You are a helpful assistant. Please respond to the questions.")]
 )
 
-#page setup
+# page setup
 st.logo("./bot.png")
 
 # Initialize the model
@@ -20,6 +20,7 @@ llm = ChatOpenAI(model="gpt-4o")
 # Initialize session state
 if "conversation_history" not in st.session_state:
     st.session_state.conversation_history = []
+
 
 # Function to handle input and update the conversation history
 def handle_input(input_text):
@@ -49,6 +50,7 @@ def handle_input(input_text):
                 st.session_state.conversation_history.append(("assistant", "No valid response received."))
         except Exception as e:
             st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
+
 
 # Display the conversation using st.chat_message
 st.title("I'm here to help you...")
