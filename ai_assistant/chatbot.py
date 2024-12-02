@@ -19,6 +19,9 @@ llm = ChatOpenAI(model="gpt-4o")
 if "conversation_history" not in st.session_state:
     st.session_state.conversation_history = []
 
+# Function to reset the conversation
+def reset_conversation():
+    st.session_state.conversation_history = []
 
 # Function to handle input and update the conversation history
 def handle_input(input_text):
@@ -49,7 +52,6 @@ def handle_input(input_text):
         except Exception as e:
             st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
 
-
 # Display the conversation using st.chat_message
 def get_image_as_base64(image_path):
     with open(image_path, "rb") as f:
@@ -71,6 +73,37 @@ st.caption("Bot can make mistakes. Review the response prior to use.")
 for role, message in st.session_state.conversation_history:
     with st.chat_message(role):
         st.markdown(message)
+
+# Custom CSS and JavaScript for "New Chat" button
+st.markdown(
+    """
+    <style>
+        .new-chat-button {
+            position: fixed;
+            bottom: 90px;
+            left: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .new-chat-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        function resetConversation() {
+            const streamlitElement = window.streamlitFrontend;
+            streamlitElement.dispatchEvent(new CustomEvent("customReset", {}));
+        }
+    </script>
+    <button class="new-chat-button" onclick="resetConversation()">New Chat</button>
+    """,
+    unsafe_allow_html=True,
+)
 
 # Handle user input using st.chat_input
 user_input = st.chat_input("How can I help you today?")
