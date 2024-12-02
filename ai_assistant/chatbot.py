@@ -67,7 +67,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.caption("          Bot can make mistakes. Review the response prior to use.")
+st.caption("Bot can make mistakes. Review the response prior to use.")
 for role, message in st.session_state.conversation_history:
     with st.chat_message(role):
         st.markdown(message)
