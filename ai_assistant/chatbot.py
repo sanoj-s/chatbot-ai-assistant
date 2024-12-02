@@ -2,6 +2,7 @@ import os
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 import streamlit as st
+import base64
 
 # Set the OpenAI API key
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
@@ -53,10 +54,16 @@ def handle_input(input_text):
 
 
 # Display the conversation using st.chat_message
+def get_image_as_base64(image_path):
+    with open(image_path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+        
+bot_icon_base64 = get_image_as_base64("./bot.png")
+
 st.markdown(
-    """
+    f"""
     <div style="display: flex; align-items: center; gap: 10px;">
-        <img src="/bot.png" alt="Bot Icon" style="border-radius: 50%; width: 40px; height: 40px;">
+        <img src="data:image/png;base64,{bot_icon_base64}" alt="Bot Icon" style="border-radius: 50%; width: 40px; height: 40px;">
         <h1 style="margin: 0;">I'm here to help you...</h1>
     </div>
     """,
