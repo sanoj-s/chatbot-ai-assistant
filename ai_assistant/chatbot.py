@@ -74,7 +74,7 @@ with col1:
     )
 with col2:
     # Use Markdown for the refresh button with a clickable image
-    if st.markdown(
+    st.markdown(
         f"""
         <button 
             onclick="window.location.reload();" 
@@ -92,18 +92,22 @@ with col2:
         </button>
         """,
         unsafe_allow_html=True,
-    ):
-        # Save the current conversation to saved_conversations
-        if st.session_state.conversation_history:
-            first_user_message = next(
-                (msg for role, msg in st.session_state.conversation_history if role == "user"), 
-                "Conversation"
-            )
-            st.session_state.saved_conversations.append(
-                {"title": first_user_message, "conversation": st.session_state.conversation_history}
-            )
-        # Clear the current conversation
-        st.session_state.conversation_history = []
+    )
+
+# Save the current conversation when refresh is clicked
+if "reload_trigger" not in st.session_state:
+    st.session_state.reload_trigger = False
+if st.session_state.reload_trigger:
+    if st.session_state.conversation_history:
+        first_user_message = next(
+            (msg for role, msg in st.session_state.conversation_history if role == "user"), 
+            "Conversation"
+        )
+        st.session_state.saved_conversations.append(
+            {"title": first_user_message, "conversation": st.session_state.conversation_history}
+        )
+    st.session_state.conversation_history = []
+    st.session_state.reload_trigger = False
 
 # Display saved conversations in the sidebar
 st.sidebar.header("Saved Conversations")
