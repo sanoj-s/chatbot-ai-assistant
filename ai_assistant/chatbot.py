@@ -55,7 +55,7 @@ def get_image_as_base64(image_path):
     with open(image_path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-# Add bot, refresh and export icons
+# Add bot, refresh, export icons
 bot_icon_base64 = get_image_as_base64("./bot.png")
 refresh_icon_base64 = get_image_as_base64("./refresh.png")
 download_icon_base64 = get_image_as_base64("./export.png")
@@ -87,6 +87,26 @@ with col2:
 
 # Display saved conversations in the sidebar
 st.sidebar.header("Recent Conversations")
+
+# Display the Export All Conversations button if there are saved conversations
+if st.session_state.saved_conversations:
+    # Export all button at the top right of the "Recent Conversations" label
+    export_all_conversations = "\n".join(
+        [f"{role.capitalize()}: {message}" for conversation in st.session_state.saved_conversations for role, message in conversation["conversation"]]
+    )
+    st.sidebar.markdown(
+        f"""
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Recent Conversations</span>
+            <a href="data:text/plain;charset=utf-8,{base64.b64encode(export_all_conversations.encode()).decode()}" download="All_Conversations.txt">
+                <img src="data:image/png;base64,{download_icon_base64}" width="20" height="20" title="Download All Conversations"/>
+            </a>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+# Show the individual saved conversations with a download icon for each
 for idx, saved_conversation in enumerate(reversed(st.session_state.saved_conversations)):
     title = saved_conversation["title"]
     with st.sidebar.expander(f"{title}"):
