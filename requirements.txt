@@ -10,3 +10,4 @@ python-docx
 networkx
 openpyxl
 PyMuPDF
+pdfminer
