@@ -52,18 +52,8 @@ def handle_input(input_text):
             content = getattr(response, "content", None) or response.get("content", None)
 
             if content:
-                # Format the content (here, assume it's a list of test cases)
                 formatted_content = f"Generated test cases for **{actual_text}**\n\n{content}"
                 st.session_state.conversation_history.append(("assistant", formatted_content))
-
-                # Assuming the response contains structured data, for example:
-                test_cases = [
-                    {"Test Case": "Test Case 1", "Steps": "Step 1, Step 2", "Expected Result": "Expected result"},
-                    {"Test Case": "Test Case 2", "Steps": "Step 1, Step 2", "Expected Result": "Expected result"}
-                ]
-                
-                # Display the test cases in a table format
-                st.table(test_cases)
             else:
                 st.session_state.conversation_history.append(("assistant", "No valid response received."))
         except Exception as e:
