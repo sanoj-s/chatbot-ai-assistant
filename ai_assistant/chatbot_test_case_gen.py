@@ -3,6 +3,9 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 import streamlit as st
 import json  # For saving the conversation history in JSON format
+from PyPDF2 import PdfReader  # For processing PDFs
+from PIL import Image  # For handling images
+import pytesseract  # For OCR on images
 
 # Set up OpenAI API key
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
@@ -25,6 +28,28 @@ llm = ChatOpenAI(model="gpt-4o")
 # Initialize session state
 if "conversation_history" not in st.session_state:
     st.session_state.conversation_history = []
+
+# File upload widget
+uploaded_file = st.file_uploader("Upload a document or image", type=["txt", "pdf", "docx", "png", "jpg", "jpeg"])
+
+# Process the uploaded file
+file_content = ""
+if uploaded_file:
+    if uploaded_file.type == "application/pdf":
+        pdf_reader = PdfReader(uploaded_file)
+        file_content = "\n".join([page.extract_text() for page in pdf_reader.pages])
+    elif uploaded_file.type == "text/plain":
+        file_content = uploaded_file.read().decode("utf-8")
+    elif uploaded_file.type in ["image/png", "image/jpeg"]:
+        image = Image.open(uploaded_file)
+        file_content = pytesseract.image_to_string(image)
+    else:
+        st.error("Unsupported file type")
+
+    if file_content:
+        st.success("File content extracted successfully.")
+        # Add extracted content to conversation history
+        st.session_state.conversation_history.append(("user", f"Uploaded content: {file_content[:500]}..."))  # Show only first 500 chars
 
 # Function to handle input and update the conversation history
 def handle_input(input_text):
@@ -68,20 +93,4 @@ if st.session_state.conversation_history:
 # Use st.chat_input to handle new user input
 user_input = st.chat_input("Describe requirement here")
 if user_input:
-    handle_input(user_input)
-
-    # Automatically display the assistant's response after user input
-    for role, message in st.session_state.conversation_history[-2:]:
-        with st.chat_message(role):
-            st.markdown(message)
-
-# Add Download Button
-if st.session_state.conversation_history:
-    # Convert conversation history to a formatted text
-    conversation_text = "\n".join([f"{role}: {message}" for role, message in st.session_state.conversation_history])
-    st.download_button(
-        label="Download Test Cases",
-        data=conversation_text,
-        file_name="test_cases.txt",
-        mime="text/plain",
-    )
+    handle
