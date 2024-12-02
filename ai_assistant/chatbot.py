@@ -89,18 +89,21 @@ st.sidebar.header("Recent Conversations")
 for idx, saved_conversation in enumerate(reversed(st.session_state.saved_conversations)):
     title = saved_conversation["title"]
     with st.sidebar.expander(f"{title}"):
-        # Add the Download Conversation button at the top of each conversation
+        # Add the Download icon button at the top of each conversation
         conversation_text = "\n".join(
             [f"{role.capitalize()}: {message}" for role, message in saved_conversation["conversation"]]
         )
 
-        # Display the "Download Conversation" button at the top
-        st.download_button(
-            label="Download Conversation",
-            data=conversation_text,
-            file_name=f"{title.replace(' ', '_')}.txt",
-            mime="text/plain",
-            key=f"download_text_{idx}",
+        # Display the Download icon button at the right
+        st.markdown(
+            f"""
+            <div style="text-align: right;">
+                <a href="data:text/plain;charset=utf-8,{base64.b64encode(conversation_text.encode()).decode()}" download="{title.replace(' ', '_')}.txt">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/Font_Awesome_5_solid_download.svg" width="20" height="20" title="Download Conversation"/>
+                </a>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
 
         # Display the conversation messages below the download button
