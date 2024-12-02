@@ -75,25 +75,12 @@ with col1:
         unsafe_allow_html=True,
     )
 with col2:
-     st.markdown(
-        f"""
-        <button 
-            onclick="window.location.reload();" 
-            style="
-                background: none; 
-                border: none; 
-                cursor: pointer;
-                display: flex; 
-                justify-content: center; 
-                align-items: center;
-                padding: 10px;
-            "
-        >
-            <img src="data:image/png;base64,{refresh_icon_base64}" alt="Refresh Icon" style="width: 30px; height: 30px;">
-        </button>
-        """,
-        unsafe_allow_html=True,
-    )
+    if st.button("", key="refresh_button", help="Refresh Chat"):
+        if st.session_state.conversation_history:
+            st.session_state.saved_conversations.append(
+                {"timestamp": st.session_state.get("timestamp", len(st.session_state.saved_conversations) + 1), 
+                "conversation": st.session_state.conversation_history})
+        st.session_state.conversation_history = []
 
 # Display saved conversations in the sidebar
 st.sidebar.header("Saved Conversations")
