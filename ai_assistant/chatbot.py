@@ -61,6 +61,9 @@ for role, message in st.session_state.conversation_history:
     with st.chat_message(role):
         st.markdown(message)
 
+# Add a spacer to push content upwards
+st.write("<div style='flex-grow: 1;'></div>", unsafe_allow_html=True)
+
 # Add the "New Chat" button and user input at the bottom
 col1, col2 = st.columns([1, 5])  # Adjust the width ratio as needed
 with col1:
