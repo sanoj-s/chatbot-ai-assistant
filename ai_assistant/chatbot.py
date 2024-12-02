@@ -97,7 +97,6 @@ if st.session_state.saved_conversations:
     st.sidebar.markdown(
         f"""
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <br></br>
             <a href="data:text/plain;charset=utf-8,{base64.b64encode(export_all_conversations.encode()).decode()}" download="All_Conversations.txt">
                 <img src="data:image/png;base64,{download_icon_base64}" width="20" height="20" title="Download All Conversations"/>
             </a>
