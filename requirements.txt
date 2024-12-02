@@ -10,4 +10,4 @@ python-docx
 networkx
 openpyxl
 pymupdf
-pdfminer
+pdfminer.six==20201018
