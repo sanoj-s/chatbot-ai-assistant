@@ -52,71 +52,76 @@ def handle_input(input_text):
         except Exception as e:
             st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
 
-# Display the conversation using st.chat_message
-def get_image_as_base64(image_path):
-    with open(image_path, "rb") as f:
-        return base64.b64encode(f.read()).decode()
-        
-bot_icon_base64 = get_image_as_base64("./bot.png")
-
-st.markdown(
-    f"""
-    <div style="display: flex; align-items: center; gap: 10px;">
-        <img src="data:image/png;base64,{bot_icon_base64}" alt="Bot Icon" style="border-radius: 50%; width: 60px; height: 60px;">
-        <h1 style="margin: 0;">I'm here to help you...</h1>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-st.caption("Bot can make mistakes. Review the response prior to use.")
-for role, message in st.session_state.conversation_history:
-    with st.chat_message(role):
-        st.markdown(message)
-
-# Custom CSS and JavaScript for "New Chat" button
+# Custom CSS for alignment
 st.markdown(
     """
     <style>
-        .new-chat-button {
+        .input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             position: fixed;
-            bottom: 90px;
-            left: 10px;
+            bottom: 10px;
+            width: 100%;
+            padding: 0 20px;
+            background: white;
+            z-index: 1000;
+        }
+        .new-chat-button {
             background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
-            padding: 10px 20px;
+            padding: 10px 15px;
             cursor: pointer;
             font-size: 14px;
         }
         .new-chat-button:hover {
             background-color: #0056b3;
         }
-    </style>
-    <script>
-        function resetConversation() {
-            const streamlitElement = window.streamlitFrontend;
-            streamlitElement.dispatchEvent(new CustomEvent("customReset", {}));
+        .st-chat-input {
+            flex-grow: 1;
         }
-    </script>
-    <button class="new-chat-button" onclick="resetConversation()">New Chat</button>
+    </style>
     """,
     unsafe_allow_html=True,
 )
 
-# Handle user input using st.chat_input
+# Add a container for the input and the new chat button
+st.markdown(
+    """
+    <div class="input-container">
+        <button class="new-chat-button" onclick="window.location.reload();">New Chat</button>
+        <div class="st-chat-input">
+            <!-- The chat input from Streamlit will render here -->
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# Reset conversation when the user clicks "New Chat"
+if st.session_state.get("reset"):
+    reset_conversation()
+    st.session_state["reset"] = False
+
+# Display the conversation history
+for role, message in st.session_state.conversation_history:
+    with st.chat_message(role):
+        st.markdown(message)
+
+# Handle user input
 user_input = st.chat_input("How can I help you today?")
 if user_input:
-    # Display the user's input immediately
+    # Add user input to conversation history
     st.session_state.conversation_history.append(("user", user_input))
     with st.chat_message("user"):
         st.markdown(user_input)
 
-    # Process the input to get the assistant's response
+    # Process the input and generate a response
     handle_input(user_input)
 
-    # Automatically display the assistant's response
+    # Display the assistant's response
     for role, message in st.session_state.conversation_history[-1:]:
         with st.chat_message(role):
             st.markdown(message)
