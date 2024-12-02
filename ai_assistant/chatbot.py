@@ -23,8 +23,9 @@ if "conversation_history" not in st.session_state:
 if "saved_conversations" not in st.session_state:
     st.session_state.saved_conversations = []
 
-if "expanded_conversations" not in st.session_state:
-    st.session_state.expanded_conversations = False  # Track the expansion state
+# Track whether the sidebar should be expanded
+if "sidebar_expanded" not in st.session_state:
+    st.session_state.sidebar_expanded = False
 
 # Function to handle input and update the conversation history
 def handle_input(input_text):
@@ -90,42 +91,55 @@ with col2:
                 st.session_state.saved_conversations.append(
                     {"title": first_user_message, "conversation": st.session_state.conversation_history}
                 )
+            st.session_state.sidebar_expanded = True  # Expand sidebar on new conversation
         # Clear the current conversation history after saving
         st.session_state.conversation_history = []
 
-# Display saved conversations in the sidebar
-st.sidebar.header("Recent Conversations")
+# Dynamically display sidebar content
+if st.session_state.sidebar_expanded:
+    st.sidebar.header("Recent Conversations")
 
-# Check if there are any saved conversations and set the sidebar expansion
-if st.session_state.saved_conversations:
-    if not st.session_state.expanded_conversations:
-        # Set the expander to be expanded once there are saved conversations
-        st.session_state.expanded_conversations = True
-
-# Show the individual saved conversations with a download icon for each
-for idx, saved_conversation in enumerate(reversed(st.session_state.saved_conversations)):
-    title = saved_conversation["title"]
-    with st.sidebar.expander(f"{title}", expanded=st.session_state.expanded_conversations):
-        # Add the Download icon button at the top of each conversation
-        conversation_text = "\n".join(
-            [f"{role.capitalize()}: {message}" for role, message in saved_conversation["conversation"]]
+    # Display the Export All Conversations button if there are saved conversations
+    if st.session_state.saved_conversations:
+        # Export all button at the top right of the "Recent Conversations" label
+        export_all_conversations = "\n".join(
+            [f"{role.capitalize()}: {message}" for conversation in st.session_state.saved_conversations for role, message in conversation["conversation"]]
         )
-
-        # Display the Download icon button at the right
-        st.markdown(
+        st.sidebar.markdown(
             f"""
-            <div style="text-align: right;">
-                <a href="data:text/plain;charset=utf-8,{urllib.parse.quote(conversation_text)}" download="{title.replace(' ', '_')}.txt">
-                    <img src="data:image/png;base64,{download_icon_base64}" width="20" height="20" title="Download Conversation"/>
+            <div style="display: flex; justify-content: flex-end; align-items: center;">
+                <a href="data:text/plain;charset=utf-8,{urllib.parse.quote(export_all_conversations)}" download="All_Conversations.txt">
+                    <img src="data:image/png;base64,{download_icon_base64}" width="20" height="20" title="Download All Conversations"/>
                 </a>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-        # Display the conversation messages below the download button
-        for role, message in saved_conversation["conversation"]:
-            st.markdown(f"**{role.capitalize()}**: {message}")
+    # Show individual saved conversations with a download icon for each
+    for idx, saved_conversation in enumerate(reversed(st.session_state.saved_conversations)):
+        title = saved_conversation["title"]
+        with st.sidebar.expander(f"{title}"):
+            # Add the Download icon button at the top of each conversation
+            conversation_text = "\n".join(
+                [f"{role.capitalize()}: {message}" for role, message in saved_conversation["conversation"]]
+            )
+
+            # Display the Download icon button at the right
+            st.markdown(
+                f"""
+                <div style="text-align: right;">
+                    <a href="data:text/plain;charset=utf-8,{urllib.parse.quote(conversation_text)}" download="{title.replace(' ', '_')}.txt">
+                        <img src="data:image/png;base64,{download_icon_base64}" width="20" height="20" title="Download Conversation"/>
+                    </a>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+            # Display the conversation messages below the download button
+            for role, message in saved_conversation["conversation"]:
+                st.markdown(f"**{role.capitalize()}**: {message}")
 
 # Caption for the bot
 st.caption("Bot can make mistakes. Review the response prior to use.")
