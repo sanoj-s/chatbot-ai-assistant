@@ -23,6 +23,9 @@ if "conversation_history" not in st.session_state:
 if "saved_conversations" not in st.session_state:
     st.session_state.saved_conversations = []
 
+if "expanded_conversations" not in st.session_state:
+    st.session_state.expanded_conversations = False  # Track the expansion state
+
 # Function to handle input and update the conversation history
 def handle_input(input_text):
     if input_text:
@@ -93,27 +96,16 @@ with col2:
 # Display saved conversations in the sidebar
 st.sidebar.header("Recent Conversations")
 
-# Display the Export All Conversations button if there are saved conversations
+# Check if there are any saved conversations and set the sidebar expansion
 if st.session_state.saved_conversations:
-    # Export all button at the top right of the "Recent Conversations" label
-    export_all_conversations = "\n".join(
-        [f"{role.capitalize()}: {message}" for conversation in st.session_state.saved_conversations for role, message in conversation["conversation"]]
-    )
-    st.sidebar.markdown(
-        f"""
-        <div style="display: flex; justify-content: flex-end; align-items: center;">
-             <a href="data:text/plain;charset=utf-8,{urllib.parse.quote(export_all_conversations)}" download="All_Conversations.txt">
-                <img src="data:image/png;base64,{download_icon_base64}" width="20" height="20" title="Download All Conversations"/>
-            </a>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    if not st.session_state.expanded_conversations:
+        # Set the expander to be expanded once there are saved conversations
+        st.session_state.expanded_conversations = True
 
 # Show the individual saved conversations with a download icon for each
 for idx, saved_conversation in enumerate(reversed(st.session_state.saved_conversations)):
     title = saved_conversation["title"]
-    with st.sidebar.expander(f"{title}"):
+    with st.sidebar.expander(f"{title}", expanded=st.session_state.expanded_conversations):
         # Add the Download icon button at the top of each conversation
         conversation_text = "\n".join(
             [f"{role.capitalize()}: {message}" for role, message in saved_conversation["conversation"]]
