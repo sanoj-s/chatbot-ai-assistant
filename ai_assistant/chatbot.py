@@ -60,30 +60,16 @@ def get_image_as_base64(image_path):
 bot_icon_base64 = get_image_as_base64("./bot.png")
 refresh_icon_base64 = get_image_as_base64("./refresh.png")
 
-# Display the header with the refresh icon
-col1, col2 = st.columns([0.9, 0.1])
-with col1:
-    st.markdown(
-        f"""
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <img src="data:image/png;base64,{bot_icon_base64}" alt="Bot Icon" style="border-radius: 50%; width: 60px; height: 60px;">
-            <h1 style="margin: 0;">I'm here to help you...</h1>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-with col2:
-    if st.button("🔄", key="refresh_button", help="Refresh"):
-        # Save the current conversation and reset
-        if st.session_state.conversation_history:
-            first_user_message = next(
-                (msg for role, msg in st.session_state.conversation_history if role == "user"),
-                "Conversation",
-            )
-            st.session_state.saved_conversations.append(
-                {"title": first_user_message, "conversation": st.session_state.conversation_history}
-            )
-        st.session_state.conversation_history = []
+# Display the header
+st.markdown(
+    f"""
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="data:image/png;base64,{bot_icon_base64}" alt="Bot Icon" style="border-radius: 50%; width: 60px; height: 60px;">
+        <h1 style="margin: 0;">I'm here to help you...</h1>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 # Display saved conversations in the sidebar
 st.sidebar.header("Recent Conversations")
@@ -116,3 +102,16 @@ if user_input:
     for role, message in st.session_state.conversation_history[-1:]:
         with st.chat_message(role):
             st.markdown(message)
+
+# Display the refresh button at the bottom
+if st.button("🔄 Refresh", key="refresh_button", help="Refresh"):
+    # Save the current conversation and reset
+    if st.session_state.conversation_history:
+        first_user_message = next(
+            (msg for role, msg in st.session_state.conversation_history if role == "user"),
+            "Conversation",
+        )
+        st.session_state.saved_conversations.append(
+            {"title": first_user_message, "conversation": st.session_state.conversation_history}
+        )
+    st.session_state.conversation_history = []
