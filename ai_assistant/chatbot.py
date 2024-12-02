@@ -26,8 +26,9 @@ if "saved_conversations" not in st.session_state:
 # Function to handle input and update the conversation history
 def handle_input(input_text):
     if input_text:
-        # Add the user's input to conversation history
-        st.session_state.conversation_history.append(("user", input_text))
+        # Add the user's input to conversation history if it hasn't been added yet
+        if not any(msg[1] == input_text for msg in st.session_state.conversation_history if msg[0] == "user"):
+            st.session_state.conversation_history.append(("user", input_text))
 
         # Build the conversation history for the model
         chat_history = [("system", "You are a helpful assistant. Please respond to the questions.")]
@@ -145,15 +146,13 @@ for role, message in st.session_state.conversation_history:
 # Handle user input using st.chat_input
 user_input = st.chat_input("How can I help you today?")
 if user_input:
-    # Display the user's input immediately
-    st.session_state.conversation_history.append(("user", user_input))
-    with st.chat_message("user"):
-        st.markdown(user_input)
-
     # Process the input to get the assistant's response
     handle_input(user_input)
 
-    # Automatically display the assistant's response
+    # Automatically display the user's input and the assistant's response
+    with st.chat_message("user"):
+        st.markdown(user_input)
+
     for role, message in st.session_state.conversation_history[-1:]:
         with st.chat_message(role):
             st.markdown(message)
