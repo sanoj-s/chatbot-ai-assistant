@@ -6,6 +6,7 @@ from langchain_community.document_loaders import (
     UnstructuredExcelLoader,
     UnstructuredWordDocumentLoader,
 )
+import fitz
 from ragas.testset import TestsetGenerator
 from ragas.llms import LangchainLLMWrapper
 from ragas.embeddings import LangchainEmbeddingsWrapper
@@ -82,7 +83,7 @@ if input_method == "Enter URL":
 
 elif input_method == "Upload a File":
     uploaded_file = st.file_uploader(
-        "Upload a file (docx, xlsx):", type=["docx", "xlsx"]
+        "Upload a file (docx, xlsx, pdf):", type=["docx", "xlsx", "pdf"]
     )
 
     # Add the slider to select the number of test datasets
@@ -104,11 +105,17 @@ elif input_method == "Upload a File":
                     loader = UnstructuredWordDocumentLoader(temp_file_path)
                 elif file_extension == "xlsx":
                     loader = UnstructuredExcelLoader(temp_file_path)
+                elif file_extension == "pdf":
+                    # PDF text extraction
+                    with fitz.open(temp_file_path) as pdf:
+                        text = ""
+                        for page in pdf:
+                            text += page.get_text()
+                    documents = [{"text": text}]
                 else:
                     st.error("Unsupported file format.")
                     st.stop()
 
-                documents = loader.load()
                 dataset = generator.generate_with_langchain_docs(documents, testset_size=num_test_datasets)
                 df = dataset.to_pandas()
 
