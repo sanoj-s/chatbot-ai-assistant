@@ -5,7 +5,7 @@ import fitz
 from langchain_community.document_loaders import (
     WebBaseLoader,
     UnstructuredExcelLoader,
-    UnstructuredWordDocumentLoader,
+    UnstructuredWordDocumentLoader,UnstructuredPDFLoader,
 )
 from ragas.testset import TestsetGenerator
 from ragas.llms import LangchainLLMWrapper
@@ -103,19 +103,19 @@ elif input_method == "Upload a File":
                 file_extension = uploaded_file.name.split(".")[-1].lower()
                 if file_extension == "docx":
                     loader = UnstructuredWordDocumentLoader(temp_file_path)
+                    documents = loader.load()
                 elif file_extension == "xlsx":
                     loader = UnstructuredExcelLoader(temp_file_path)
+                    documents = loader.load()
                 elif file_extension == "pdf":
-                    # PDF text extraction
-                    with fitz.open(temp_file_path) as pdf:
-                        text = ""
-                        for page in pdf:
-                            text += page.get_text()
-                    documents = [{"text": text}]
+                    # Use UnstructuredPDFLoader
+                    loader = UnstructuredPDFLoader(temp_file_path)
+                    documents = loader.load()
                 else:
                     st.error("Unsupported file format.")
                     st.stop()
 
+                # Generate the test dataset
                 dataset = generator.generate_with_langchain_docs(documents, testset_size=num_test_datasets)
                 df = dataset.to_pandas()
 
