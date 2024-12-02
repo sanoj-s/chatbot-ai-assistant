@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 import tempfile
+import fitz
 from langchain_community.document_loaders import (
     WebBaseLoader,
     UnstructuredExcelLoader,
