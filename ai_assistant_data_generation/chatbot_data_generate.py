@@ -82,7 +82,7 @@ if input_method == "Enter URL":
 
 elif input_method == "Upload a File":
     uploaded_file = st.file_uploader(
-        "Upload a file (docx, xlsx, ppt):", type=["docx", "xlsx", "ppt"]
+        "Upload a file (docx, xlsx, pptx):", type=["docx", "xlsx", "pptx"]
     )
 
     # Add the slider to select the number of test datasets
@@ -104,7 +104,7 @@ elif input_method == "Upload a File":
                     loader = UnstructuredWordDocumentLoader(temp_file_path)
                 elif file_extension == "xlsx":
                     loader = UnstructuredExcelLoader(temp_file_path)
-                elif file_extension == "ppt":
+                elif file_extension == "pptx":
                     loader = UnstructuredPowerPointLoader(temp_file_path)
                 else:
                     st.error("Unsupported file format.")
