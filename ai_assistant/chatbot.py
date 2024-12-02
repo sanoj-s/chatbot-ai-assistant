@@ -47,8 +47,13 @@ def handle_input(input_text):
         except Exception as e:
             st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
 
-# Page setup
-st.title("I'm here to help you...")
+# Page setup with bot icon and title
+col1, col2 = st.columns([1, 5])  # Adjust the width ratio as needed
+with col1:
+    st.image("./bot.png", use_column_width=True)  # Display the bot icon
+with col2:
+    st.title("I'm here to help you...")
+
 st.caption("Bot can make mistakes. Review the response prior to use.")
 
 # Display the conversation using st.chat_message
@@ -59,18 +64,15 @@ for role, message in st.session_state.conversation_history:
 # Add the "New Chat" button and user input at the bottom
 col1, col2 = st.columns([1, 5])  # Adjust the width ratio as needed
 with col1:
-    st.image("./bot.png", use_column_width=True)  # Display the bot icon
+    if st.button("New Chat"):
+        st.session_state.conversation_history = []  # Reset conversation history
 
-# Handle user input using st.chat_input
-user_input = st.chat_input("How can I help you today?")
-if user_input:
-    handle_input(user_input)
+with col2:
+    user_input = st.chat_input("How can I help you today?")
+    if user_input:
+        handle_input(user_input)
 
-    # Automatically display the assistant's response
-    for role, message in st.session_state.conversation_history[-2:]:
-        with st.chat_message(role):
-            st.markdown(message)
-
-# Add the "New Chat" button at the bottom
-if st.button("New Chat"):
-    st.session_state.conversation_history = []  # Reset conversation history
+        # Automatically display the assistant's response
+        for role, message in st.session_state.conversation_history[-2:]:
+            with st.chat_message(role):
+                st.markdown(message)
