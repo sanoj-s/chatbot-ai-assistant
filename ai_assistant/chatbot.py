@@ -99,7 +99,7 @@ for idx, saved_conversation in enumerate(reversed(st.session_state.saved_convers
             f"""
             <div style="text-align: right;">
                 <a href="data:text/plain;charset=utf-8,{base64.b64encode(conversation_text.encode()).decode()}" download="{title.replace(' ', '_')}.txt">
-                    <img src=""data:image/png;base64,{bot_icon_base64}" width="20" height="20" title="Download Conversation"/>
+                    <img src="data:image/png;base64,{bot_icon_base64}" width="20" height="20" title="Download Conversation"/>
                 </a>
             </div>
             """,
