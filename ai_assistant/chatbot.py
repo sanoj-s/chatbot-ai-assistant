@@ -3,6 +3,7 @@ import streamlit as st
 import base64
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
+import urllib.parse
 
 # Set the OpenAI API key
 os.environ["OPENAI_API_KEY"] = st.secrets.get("OPENAI_API_KEY", "")
@@ -97,7 +98,7 @@ if st.session_state.saved_conversations:
     st.sidebar.markdown(
         f"""
         <div style="display: flex; justify-content: flex-end; align-items: center;">
-            <a href="data:text/plain;charset=utf-8,{base64.b64encode(export_all_conversations.encode()).decode()}" download="All_Conversations.txt">
+             <a href="data:text/plain;charset=utf-8,{urllib.parse.quote(export_all_conversations)}" download="All_Conversations.txt">
                 <img src="data:image/png;base64,{download_icon_base64}" width="20" height="20" title="Download All Conversations"/>
             </a>
         </div>
@@ -118,7 +119,7 @@ for idx, saved_conversation in enumerate(reversed(st.session_state.saved_convers
         st.markdown(
             f"""
             <div style="text-align: right;">
-                <a href="data:text/plain;charset=utf-8,{base64.b64encode(conversation_text.encode()).decode()}" download="{title.replace(' ', '_')}.txt">
+                <a href="data:text/plain;charset=utf-8,{urllib.parse.quote(export_all_conversations)}" download="{title.replace(' ', '_')}.txt">
                     <img src="data:image/png;base64,{download_icon_base64}" width="20" height="20" title="Download Conversation"/>
                 </a>
             </div>
