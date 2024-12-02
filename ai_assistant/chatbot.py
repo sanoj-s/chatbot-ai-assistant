@@ -50,11 +50,6 @@ def handle_input(input_text):
             st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
 
 
-# Add a new function to reset the conversation
-def start_new_chat():
-    st.session_state.conversation_history = []
-    st.experimental_rerun()
-
 # Display the conversation using st.chat_message
 def get_image_as_base64(image_path):
     with open(image_path, "rb") as f:
@@ -62,7 +57,6 @@ def get_image_as_base64(image_path):
         
 bot_icon_base64 = get_image_as_base64("./bot.png")
 
-# Modify the Streamlit UI to include New Chat icon
 st.markdown(
     f"""
     <div style="display: flex; align-items: center; gap: 10px;">
@@ -72,29 +66,24 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
 st.caption("Bot can make mistakes. Review the response prior to use.")
+for role, message in st.session_state.conversation_history:
+    with st.chat_message(role):
+        st.markdown(message)
 
-# Create a container for chat input and new chat button
-col1, col2 = st.columns([0.9, 0.1])
-
-with col1:
-    user_input = st.chat_input("How can I help you today?")
-
-with col2:
-    # Add New Chat button
-    new_chat_button = st.button("🆕", help="Start a new chat")
-    if new_chat_button:
-        start_new_chat()
-
-# Existing conversation display and input handling code remains the same...
+# Handle user input using st.chat_input
+user_input = st.chat_input("How can I help you today?")
 if user_input:
-    # Process input as before
+    # Display the user's input immediately
     st.session_state.conversation_history.append(("user", user_input))
     with st.chat_message("user"):
         st.markdown(user_input)
-    
+
+    # Process the input to get the assistant's response
     handle_input(user_input)
-    
+
+    # Automatically display the assistant's response
     for role, message in st.session_state.conversation_history[-1:]:
         with st.chat_message(role):
             st.markdown(message)
