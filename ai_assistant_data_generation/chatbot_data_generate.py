@@ -4,7 +4,9 @@ import tempfile
 from langchain_community.document_loaders import (
     WebBaseLoader,
     UnstructuredExcelLoader,
-    UnstructuredWordDocumentLoader, UnstructuredPowerPointLoader,
+    UnstructuredWordDocumentLoader,
+    UnstructuredPowerPointLoader,
+    UnstructuredHTMLLoader,
 )
 from ragas.testset import TestsetGenerator
 from ragas.llms import LangchainLLMWrapper
@@ -82,7 +84,7 @@ if input_method == "Enter URL":
 
 elif input_method == "Upload a File":
     uploaded_file = st.file_uploader(
-        "Upload a file (docx, xlsx, pptx):", type=["docx", "xlsx", "pptx"]
+        "Upload a file (docx, xlsx, pptx, html):", type=["docx", "xlsx", "pptx", "html"]
     )
 
     # Add the slider to select the number of test datasets
@@ -106,6 +108,8 @@ elif input_method == "Upload a File":
                     loader = UnstructuredExcelLoader(temp_file_path)
                 elif file_extension == "pptx":
                     loader = UnstructuredPowerPointLoader(temp_file_path)
+                elif file_extension == "html":
+                    loader = UnstructuredHTMLLoader(temp_file_path)
                 else:
                     st.error("Unsupported file format.")
                     st.stop()
