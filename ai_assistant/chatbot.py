@@ -81,9 +81,12 @@ with col2:
                 (msg for role, msg in st.session_state.conversation_history if role == "user"),
                 "Conversation",
             )
-            st.session_state.saved_conversations.append(
-                {"title": first_user_message, "conversation": st.session_state.conversation_history}
-            )
+            # Add only the new conversation if it's not already saved
+            if not any(saved_conversation["title"] == first_user_message for saved_conversation in st.session_state.saved_conversations):
+                st.session_state.saved_conversations.append(
+                    {"title": first_user_message, "conversation": st.session_state.conversation_history}
+                )
+        # Clear the current conversation history after saving
         st.session_state.conversation_history = []
 
 # Display saved conversations in the sidebar
