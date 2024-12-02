@@ -12,9 +12,6 @@ prompt = ChatPromptTemplate.from_messages(
     [("system", "You are a helpful assistant. Please respond to the questions.")]
 )
 
-# page setup
-# st.logo("./bot.png")
-
 # Initialize the model
 llm = ChatOpenAI(model="gpt-4o")
 
@@ -70,8 +67,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-#st.title("I'm here to help you...")
-st.caption("Bot can make mistakes. Review the response prior to use.")
+st.caption("          Bot can make mistakes. Review the response prior to use.")
 for role, message in st.session_state.conversation_history:
     with st.chat_message(role):
         st.markdown(message)
