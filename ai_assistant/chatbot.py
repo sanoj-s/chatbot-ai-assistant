@@ -55,9 +55,10 @@ def get_image_as_base64(image_path):
     with open(image_path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-# Add bot and refresh icons
+# Add bot, refresh and export icons
 bot_icon_base64 = get_image_as_base64("./bot.png")
 refresh_icon_base64 = get_image_as_base64("./refresh.png")
+download_icon_base64 = get_image_as_base64("./export.png")
 
 # Display the header with the refresh icon
 col1, col2 = st.columns([0.9, 0.1])
@@ -99,7 +100,7 @@ for idx, saved_conversation in enumerate(reversed(st.session_state.saved_convers
             f"""
             <div style="text-align: right;">
                 <a href="data:text/plain;charset=utf-8,{base64.b64encode(conversation_text.encode()).decode()}" download="{title.replace(' ', '_')}.txt">
-                    <img src="data:image/png;base64,{bot_icon_base64}" width="20" height="20" title="Download Conversation"/>
+                    <img src="data:image/png;base64,{download_icon_base64}" width="20" height="20" title="Download Conversation"/>
                 </a>
             </div>
             """,
