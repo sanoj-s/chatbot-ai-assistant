@@ -78,6 +78,8 @@ with col1:
         """,
         unsafe_allow_html=True,
     )
+
+# Align refresh icon near the chat input field
 with col2:
     if st.button("🔄", key="refresh_button", help="Refresh"):
         # Save the current conversation and reset
@@ -120,6 +122,7 @@ if st.session_state.sidebar_expanded:
     for idx, saved_conversation in enumerate(reversed(st.session_state.saved_conversations)):
         title = saved_conversation["title"]
         with st.sidebar.expander(f"{title}"):
+
             # Add the Download icon button at the top of each conversation
             conversation_text = "\n".join(
                 [f"{role.capitalize()}: {message}" for role, message in saved_conversation["conversation"]]
@@ -150,15 +153,19 @@ for role, message in st.session_state.conversation_history:
         st.markdown(message)
 
 # Handle user input using st.chat_input
-user_input = st.chat_input("How can I help you today?")
-if user_input:
-    # Process the input to get the assistant's response
-    handle_input(user_input)
+col1, col2 = st.columns([0.9, 0.1])  # Reuse the same column layout
+with col1:
+    user_input = st.chat_input("How can I help you today?")
 
-    # Automatically display the user's input and the assistant's response
-    with st.chat_message("user"):
-        st.markdown(user_input)
+with col2:
+    if user_input:
+        # Process the input to get the assistant's response
+        handle_input(user_input)
 
-    for role, message in st.session_state.conversation_history[-1:]:
-        with st.chat_message(role):
-            st.markdown(message)
+        # Automatically display the user's input and the assistant's response
+        with st.chat_message("user"):
+            st.markdown(user_input)
+
+        for role, message in st.session_state.conversation_history[-1:]:
+            with st.chat_message(role):
+                st.markdown(message)
