@@ -61,7 +61,7 @@ st.markdown(
     f"""
     <div style="display: flex; align-items: center; gap: 10px;">
         <img src="data:image/png;base64,{bot_icon_base64}" alt="Bot Icon" style="border-radius: 50%; width: 60px; height: 60px;">
-        <h1 style="margin: 0;">I'm here to help you...</h1>
+        <h2 style="margin: 0;">I'm here to help you...</h2>
     </div>
     """,
     unsafe_allow_html=True,
