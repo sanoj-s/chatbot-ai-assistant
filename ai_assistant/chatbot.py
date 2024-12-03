@@ -115,9 +115,9 @@ for role, message in st.session_state.conversation_history:
     with st.chat_message(role):
         st.markdown(message)
 
-# Show refresh icon at the bottom left if there's conversation history
+# Show refresh icon fixed just above the message box if there's conversation history
 if st.session_state.conversation_history:
-    col1, col2 = st.columns([0.1, 0.9])
+    col1, col2 = st.columns([0.1, 0.9], gap="small")  # Adjust the layout for alignment
     with col1:
         if st.button("🔄", key="refresh_button", help="Refresh"):
             if st.session_state.conversation_history:
@@ -144,3 +144,4 @@ if user_input:
     for role, message in st.session_state.conversation_history[-1:]:
         with st.chat_message(role):
             st.markdown(message)
+
