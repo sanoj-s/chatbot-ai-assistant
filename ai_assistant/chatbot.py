@@ -115,35 +115,26 @@ for role, message in st.session_state.conversation_history:
     with st.chat_message(role):
         st.markdown(message)
 
-# Create a layout to place the refresh button and message input
-col1, col2 = st.columns([0.1, 0.9], gap="small")  # Column layout: refresh button in col1, input box in col2
-with col1:
-    if st.button("🔄", key="refresh_button", help="Refresh"):
-        # Save the current conversation and clear history
-        if st.session_state.conversation_history:
-            first_user_message = next(
-                (msg for role, msg in st.session_state.conversation_history if role == "user"),
-                "Conversation",
-            )
-            # Add only new conversations to saved conversations
-            if not any(
-                saved_conversation["title"] == first_user_message
-                for saved_conversation in st.session_state.saved_conversations
-            ):
-                st.session_state.saved_conversations.append(
-                    {"title": first_user_message, "conversation": st.session_state.conversation_history}
-                )
-            st.session_state.sidebar_expanded = True  # Expand the sidebar on saving a conversation
-        # Clear the conversation history
-        st.session_state.conversation_history = []
+# Place the refresh button just above the message box, aligned to the bottom-left of the last message
+if st.session_state.conversation_history:
+    # Use a small vertical gap and place the refresh button
+    st.markdown(
+        """
+        <div style="display: flex; justify-content: flex-start; margin-bottom: 10px;">
+            <button onclick="window.location.reload()" style="background: none; border: none; cursor: pointer;" title="Refresh">
+                🔄
+            </button>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-with col2:
-    # Handle user input using st.chat_input
-    user_input = st.chat_input("How can I help you today?")
-    if user_input:
-        handle_input(user_input)
-        with st.chat_message("user"):
-            st.markdown(user_input)
-        for role, message in st.session_state.conversation_history[-1:]:
-            with st.chat_message(role):
-                st.markdown(message)
+# Handle user input using st.chat_input
+user_input = st.chat_input("How can I help you today?")
+if user_input:
+    handle_input(user_input)
+    with st.chat_message("user"):
+        st.markdown(user_input)
+    for role, message in st.session_state.conversation_history[-1:]:
+        with st.chat_message(role):
+            st.markdown(message)
