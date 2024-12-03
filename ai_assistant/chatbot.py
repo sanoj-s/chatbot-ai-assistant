@@ -77,6 +77,23 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# Handle the refresh button logic
+if st.button("🔄", key="refresh_button", help="Refresh"):
+    if st.session_state.conversation_history:
+        # Save the current conversation before clearing it
+        first_user_message = next(
+            (msg for role, msg in st.session_state.conversation_history if role == "user"),
+            "Conversation",
+        )
+        # Add only the new conversation if it's not already saved
+        if not any(saved_conversation["title"] == first_user_message for saved_conversation in st.session_state.saved_conversations):
+            st.session_state.saved_conversations.append(
+                {"title": first_user_message, "conversation": st.session_state.conversation_history}
+            )
+        st.session_state.sidebar_expanded = True  # Expand sidebar on new conversation
+    # Clear the current conversation history after saving
+    st.session_state.conversation_history = []
+
 # Dynamically display sidebar content
 if st.session_state.sidebar_expanded:
     st.sidebar.header("Recent Conversations")
@@ -145,18 +162,3 @@ if user_input:
         with st.chat_message(role):
             st.markdown(message)
 
-# Refresh only if there is a conversation, and update the recent conversations
-if st.session_state.conversation_history and st.button("🔄", key="refresh_button", help="Refresh"):
-    # Save the current conversation and reset
-    first_user_message = next(
-        (msg for role, msg in st.session_state.conversation_history if role == "user"),
-        "Conversation",
-    )
-    # Add only the new conversation if it's not already saved
-    if not any(saved_conversation["title"] == first_user_message for saved_conversation in st.session_state.saved_conversations):
-        st.session_state.saved_conversations.append(
-            {"title": first_user_message, "conversation": st.session_state.conversation_history}
-        )
-    st.session_state.sidebar_expanded = True  # Expand sidebar on new conversation
-    # Clear the current conversation history after saving
-    st.session_state.conversation_history = []
