@@ -30,9 +30,8 @@ if "sidebar_expanded" not in st.session_state:
 # Function to handle input and update the conversation history
 def handle_input(input_text):
     if input_text:
-        # Add the user's input to conversation history if it hasn't been added yet
-        if not any(msg[1] == input_text for msg in st.session_state.conversation_history if msg[0] == "user"):
-            st.session_state.conversation_history.append(("user", input_text))
+        # Immediately display the user input
+        st.session_state.conversation_history.append(("user", input_text))
 
         # Build the conversation history for the model
         chat_history = [("system", "You are a helpful assistant. Please respond to the questions.")]
@@ -77,22 +76,19 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Handle the refresh button logic
-if st.button("🔄", key="refresh_button", help="Refresh"):
-    if st.session_state.conversation_history:
-        # Save the current conversation before clearing it
-        first_user_message = next(
-            (msg for role, msg in st.session_state.conversation_history if role == "user"),
-            "Conversation",
-        )
-        # Add only the new conversation if it's not already saved
-        if not any(saved_conversation["title"] == first_user_message for saved_conversation in st.session_state.saved_conversations):
-            st.session_state.saved_conversations.append(
-                {"title": first_user_message, "conversation": st.session_state.conversation_history}
-            )
-        st.session_state.sidebar_expanded = True  # Expand sidebar on new conversation
-    # Clear the current conversation history after saving
-    st.session_state.conversation_history = []
+# Handle the refresh button logic and ensure it's shown only when conversation exists
+if st.session_state.conversation_history:
+    # Place the refresh icon below the conversation
+    st.markdown(
+        f"""
+        <div style="text-align: center; margin-top: 20px;">
+            <button onclick="window.location.reload();" style="border: none; background: none;">
+                <img src="data:image/png;base64,{refresh_icon_base64}" width="40" height="40" title="Refresh"/>
+            </button>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 # Dynamically display sidebar content
 if st.session_state.sidebar_expanded:
