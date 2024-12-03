@@ -3,7 +3,6 @@ import streamlit as st
 import base64
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
-import time
 import urllib.parse
 
 # Set the OpenAI API key
@@ -28,7 +27,7 @@ if "saved_conversations" not in st.session_state:
 if "sidebar_expanded" not in st.session_state:
     st.session_state.sidebar_expanded = False
 
-# Function to handle input and update the conversation history with a typing effect
+# Function to handle input and update the conversation history
 def handle_input(input_text):
     if input_text:
         # Add the user's input to conversation history if it hasn't been added yet
@@ -54,17 +53,6 @@ def handle_input(input_text):
                 st.session_state.conversation_history.append(("assistant", content))
             else:
                 st.session_state.conversation_history.append(("assistant", "No valid response received."))
-
-            # Add typing effect: display the assistant's response line by line
-            assistant_response = st.session_state.conversation_history[-1][1]
-            lines = assistant_response.split("\n")
-
-            # Simulate 2x speed typing (quickly display lines)
-            for line in lines:
-                time.sleep(0.5)  # Shorter delay for faster typing
-                with st.chat_message("assistant"):
-                    st.markdown(line)
-
         except Exception as e:
             st.session_state.conversation_history.append(("assistant", f"Error: {e}"))
 
