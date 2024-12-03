@@ -30,8 +30,9 @@ if "sidebar_expanded" not in st.session_state:
 # Function to handle input and update the conversation history
 def handle_input(input_text):
     if input_text:
-        # Immediately display the user input
-        st.session_state.conversation_history.append(("user", input_text))
+        # Add the user's input to conversation history if it hasn't been added yet
+        if not any(msg[1] == input_text for msg in st.session_state.conversation_history if msg[0] == "user"):
+            st.session_state.conversation_history.append(("user", input_text))
 
         # Build the conversation history for the model
         chat_history = [("system", "You are a helpful assistant. Please respond to the questions.")]
@@ -65,30 +66,34 @@ bot_icon_base64 = get_image_as_base64("./bot.png")
 refresh_icon_base64 = get_image_as_base64("./refresh.png")
 download_icon_base64 = get_image_as_base64("./export.png")
 
-# Display the header with the bot icon
-st.markdown(
-    f"""
-    <div style="display: flex; align-items: center; gap: 10px;">
-        <img src="data:image/png;base64,{bot_icon_base64}" alt="Bot Icon" style="border-radius: 50%; width: 60px; height: 60px;">
-        <h1 style="margin: 0;">I'm here to help you...</h1>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-# Handle the refresh button logic and ensure it's shown only when conversation exists
-if st.session_state.conversation_history:
-    # Place the refresh icon below the conversation
+# Display the header with the refresh icon
+col1, col2 = st.columns([0.9, 0.1])
+with col1:
     st.markdown(
         f"""
-        <div style="text-align: center; margin-top: 20px;">
-            <button onclick="window.location.reload();" style="border: none; background: none;">
-                <img src="data:image/png;base64,{refresh_icon_base64}" width="40" height="40" title="Refresh"/>
-            </button>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="data:image/png;base64,{bot_icon_base64}" alt="Bot Icon" style="border-radius: 50%; width: 60px; height: 60px;">
+            <h1 style="margin: 0;">I'm here to help you...</h1>
         </div>
         """,
         unsafe_allow_html=True,
     )
+with col2:
+    if st.button("🔄", key="refresh_button", help="Refresh"):
+        # Save the current conversation and reset
+        if st.session_state.conversation_history:
+            first_user_message = next(
+                (msg for role, msg in st.session_state.conversation_history if role == "user"),
+                "Conversation",
+            )
+            # Add only the new conversation if it's not already saved
+            if not any(saved_conversation["title"] == first_user_message for saved_conversation in st.session_state.saved_conversations):
+                st.session_state.saved_conversations.append(
+                    {"title": first_user_message, "conversation": st.session_state.conversation_history}
+                )
+            st.session_state.sidebar_expanded = True  # Expand sidebar on new conversation
+        # Clear the current conversation history after saving
+        st.session_state.conversation_history = []
 
 # Dynamically display sidebar content
 if st.session_state.sidebar_expanded:
@@ -157,4 +162,3 @@ if user_input:
     for role, message in st.session_state.conversation_history[-1:]:
         with st.chat_message(role):
             st.markdown(message)
-
