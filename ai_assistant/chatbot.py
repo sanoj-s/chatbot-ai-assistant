@@ -115,33 +115,35 @@ for role, message in st.session_state.conversation_history:
     with st.chat_message(role):
         st.markdown(message)
 
-# Show refresh icon fixed just above the message box if there's conversation history
-if st.session_state.conversation_history:
-    col1, col2 = st.columns([0.1, 0.9], gap="small")  # Adjust the layout for alignment
-    with col1:
-        if st.button("🔄", key="refresh_button", help="Refresh"):
-            if st.session_state.conversation_history:
-                first_user_message = next(
-                    (msg for role, msg in st.session_state.conversation_history if role == "user"),
-                    "Conversation",
+# Create a layout to place the refresh button and message input
+col1, col2 = st.columns([0.1, 0.9], gap="small")  # Column layout: refresh button in col1, input box in col2
+with col1:
+    if st.button("🔄", key="refresh_button", help="Refresh"):
+        # Save the current conversation and clear history
+        if st.session_state.conversation_history:
+            first_user_message = next(
+                (msg for role, msg in st.session_state.conversation_history if role == "user"),
+                "Conversation",
+            )
+            # Add only new conversations to saved conversations
+            if not any(
+                saved_conversation["title"] == first_user_message
+                for saved_conversation in st.session_state.saved_conversations
+            ):
+                st.session_state.saved_conversations.append(
+                    {"title": first_user_message, "conversation": st.session_state.conversation_history}
                 )
-                if not any(
-                    saved_conversation["title"] == first_user_message
-                    for saved_conversation in st.session_state.saved_conversations
-                ):
-                    st.session_state.saved_conversations.append(
-                        {"title": first_user_message, "conversation": st.session_state.conversation_history}
-                    )
-                st.session_state.sidebar_expanded = True
-            st.session_state.conversation_history = []
+            st.session_state.sidebar_expanded = True  # Expand the sidebar on saving a conversation
+        # Clear the conversation history
+        st.session_state.conversation_history = []
 
-# Handle user input using st.chat_input
-user_input = st.chat_input("How can I help you today?")
-if user_input:
-    handle_input(user_input)
-    with st.chat_message("user"):
-        st.markdown(user_input)
-    for role, message in st.session_state.conversation_history[-1:]:
-        with st.chat_message(role):
-            st.markdown(message)
-
+with col2:
+    # Handle user input using st.chat_input
+    user_input = st.chat_input("How can I help you today?")
+    if user_input:
+        handle_input(user_input)
+        with st.chat_message("user"):
+            st.markdown(user_input)
+        for role, message in st.session_state.conversation_history[-1:]:
+            with st.chat_message(role):
+                st.markdown(message)
