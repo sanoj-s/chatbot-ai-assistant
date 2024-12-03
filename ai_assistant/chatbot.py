@@ -23,18 +23,12 @@ if "conversation_history" not in st.session_state:
 if "saved_conversations" not in st.session_state:
     st.session_state.saved_conversations = []
 
-# Track whether the sidebar should be expanded
-if "sidebar_expanded" not in st.session_state:
-    st.session_state.sidebar_expanded = False
-
 # Function to handle input and update the conversation history
 def handle_input(input_text):
     if input_text:
-        # Add the user's input to conversation history if it hasn't been added yet
         if not any(msg[1] == input_text for msg in st.session_state.conversation_history if msg[0] == "user"):
             st.session_state.conversation_history.append(("user", input_text))
 
-        # Build the conversation history for the model
         chat_history = [("system", "You are a helpful assistant. Please respond to the questions.")]
         for role, message in st.session_state.conversation_history:
             if role in ["user", "assistant"]:
@@ -42,11 +36,8 @@ def handle_input(input_text):
                 chat_history.append((role, escaped_message))
 
         try:
-            # Create a prompt from the history
             modified_prompt = ChatPromptTemplate.from_messages(chat_history)
             modified_chain = modified_prompt | llm
-
-            # Get the model response
             response = modified_chain.invoke({"question": input_text})
             content = getattr(response, "content", None) or response.get("content", None)
             if content:
@@ -63,83 +54,18 @@ def get_image_as_base64(image_path):
 
 # Add bot, refresh, export icons
 bot_icon_base64 = get_image_as_base64("./bot.png")
-refresh_icon_base64 = get_image_as_base64("./refresh.png")
 download_icon_base64 = get_image_as_base64("./export.png")
 
-# Display the header with the refresh icon
-col1, col2 = st.columns([0.9, 0.1])
-with col1:
-    st.markdown(
-        f"""
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <img src="data:image/png;base64,{bot_icon_base64}" alt="Bot Icon" style="border-radius: 50%; width: 60px; height: 60px;">
-            <h1 style="margin: 0;">I'm here to help you...</h1>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-with col2:
-    if st.button("🔄", key="refresh_button", help="Refresh"):
-        # Save the current conversation and reset
-        if st.session_state.conversation_history:
-            first_user_message = next(
-                (msg for role, msg in st.session_state.conversation_history if role == "user"),
-                "Conversation",
-            )
-            # Add only the new conversation if it's not already saved
-            if not any(saved_conversation["title"] == first_user_message for saved_conversation in st.session_state.saved_conversations):
-                st.session_state.saved_conversations.append(
-                    {"title": first_user_message, "conversation": st.session_state.conversation_history}
-                )
-            st.session_state.sidebar_expanded = True  # Expand sidebar on new conversation
-        # Clear the current conversation history after saving
-        st.session_state.conversation_history = []
-
-# Dynamically display sidebar content
-if st.session_state.sidebar_expanded:
-    st.sidebar.header("Recent Conversations")
-
-    # Display the Export All Conversations button if there are saved conversations
-    if st.session_state.saved_conversations:
-        # Export all button at the top right of the "Recent Conversations" label
-        export_all_conversations = "\n".join(
-            [f"{role.capitalize()}: {message}" for conversation in st.session_state.saved_conversations for role, message in conversation["conversation"]]
-        )
-        st.sidebar.markdown(
-            f"""
-            <div style="display: flex; justify-content: flex-end; align-items: center;">
-                <a href="data:text/plain;charset=utf-8,{urllib.parse.quote(export_all_conversations)}" download="All_Conversations.txt">
-                    <img src="data:image/png;base64,{download_icon_base64}" width="20" height="20" title="Download All Conversations"/>
-                </a>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    # Show individual saved conversations with a download icon for each
-    for idx, saved_conversation in enumerate(reversed(st.session_state.saved_conversations)):
-        title = saved_conversation["title"]
-        with st.sidebar.expander(f"{title}"):
-            # Add the Download icon button at the top of each conversation
-            conversation_text = "\n".join(
-                [f"{role.capitalize()}: {message}" for role, message in saved_conversation["conversation"]]
-            )
-
-            # Display the Download icon button at the right
-            st.markdown(
-                f"""
-                <div style="text-align: right;">
-                    <a href="data:text/plain;charset=utf-8,{urllib.parse.quote(conversation_text)}" download="{title.replace(' ', '_')}.txt">
-                        <img src="data:image/png;base64,{download_icon_base64}" width="20" height="20" title="Download Conversation"/>
-                    </a>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-            # Display the conversation messages below the download button
-            for role, message in saved_conversation["conversation"]:
-                st.markdown(f"**{role.capitalize()}**: {message}")
+# Display the header with the bot icon
+st.markdown(
+    f"""
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="data:image/png;base64,{bot_icon_base64}" alt="Bot Icon" style="border-radius: 50%; width: 60px; height: 60px;">
+        <h1 style="margin: 0;">I'm here to help you...</h1>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 # Caption for the bot
 st.caption("Bot can make mistakes. Review the response prior to use.")
@@ -148,6 +74,55 @@ st.caption("Bot can make mistakes. Review the response prior to use.")
 for role, message in st.session_state.conversation_history:
     with st.chat_message(role):
         st.markdown(message)
+
+# Add CSS for the footer
+st.markdown(
+    """
+    <style>
+    .chat-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #f9f9f9;
+        padding: 10px 20px;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+    .refresh-button {
+        font-size: 20px;
+        cursor: pointer;
+        border: none;
+        background: none;
+        padding: 0;
+    }
+    .refresh-button:hover {
+        color: #007bff;
+    }
+    .chat-input {
+        flex-grow: 1;
+        margin-left: 10px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# Create the refresh button and input box at the bottom
+st.markdown(
+    f"""
+    <div class="chat-footer">
+        <button class="refresh-button" onclick="window.location.reload()">🔄 Refresh</button>
+        <div class="chat-input">
+            {st.chat_input("How can I help you today?")}
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 # Handle user input using st.chat_input
 user_input = st.chat_input("How can I help you today?")
