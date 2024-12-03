@@ -26,14 +26,11 @@ if "saved_conversations" not in st.session_state:
 # Function to handle input and update the conversation history
 def handle_input(input_text):
     if input_text:
-        if not any(msg[1] == input_text for msg in st.session_state.conversation_history if msg[0] == "user"):
-            st.session_state.conversation_history.append(("user", input_text))
+        st.session_state.conversation_history.append(("user", input_text))
 
         chat_history = [("system", "You are a helpful assistant. Please respond to the questions.")]
         for role, message in st.session_state.conversation_history:
-            if role in ["user", "assistant"]:
-                escaped_message = message.replace("{", "{{").replace("}", "}}")
-                chat_history.append((role, escaped_message))
+            chat_history.append((role, message))
 
         try:
             modified_prompt = ChatPromptTemplate.from_messages(chat_history)
@@ -52,7 +49,7 @@ def get_image_as_base64(image_path):
     with open(image_path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-# Add bot, refresh, export icons
+# Add bot icon
 bot_icon_base64 = get_image_as_base64("./bot.png")
 
 # Display the header with the bot icon
@@ -74,55 +71,37 @@ for role, message in st.session_state.conversation_history:
     with st.chat_message(role):
         st.markdown(message)
 
-# Add CSS for the footer
-st.markdown(
-    """
-    <style>
-    .chat-footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background-color: #f9f9f9;
-        padding: 10px 20px;
-        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-    }
-    .refresh-button {
-        font-size: 20px;
-        cursor: pointer;
-        border: none;
-        background: none;
-        padding: 0;
-    }
-    .refresh-button:hover {
-        color: #007bff;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+# Save and clear the conversation on refresh button click
+if st.button("🔄 Refresh", key="refresh_button", help="Refresh the conversation"):
+    # Save the conversation if there's any history
+    if st.session_state.conversation_history:
+        # Use the first user's message as the conversation title
+        first_user_message = next(
+            (msg for role, msg in st.session_state.conversation_history if role == "user"),
+            "Conversation",
+        )
+        # Avoid saving duplicates
+        if not any(saved["title"] == first_user_message for saved in st.session_state.saved_conversations):
+            st.session_state.saved_conversations.append(
+                {"title": first_user_message, "conversation": st.session_state.conversation_history}
+            )
+    # Clear the current conversation history
+    st.session_state.conversation_history = []
 
-# Create the footer layout
-st.markdown(
-    """
-    <div class="chat-footer">
-        <button class="refresh-button" onclick="window.location.reload()">🔄 Refresh</button>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+# Sidebar to show recent conversations
+if st.session_state.saved_conversations:
+    st.sidebar.header("Recent Conversations")
+    for idx, saved in enumerate(reversed(st.session_state.saved_conversations)):
+        with st.sidebar.expander(saved["title"]):
+            for role, message in saved["conversation"]:
+                st.markdown(f"**{role.capitalize()}**: {message}")
 
 # Handle user input using st.chat_input
 user_input = st.chat_input("How can I help you today?")
 if user_input:
-    # Process the input to get the assistant's response
     handle_input(user_input)
 
-    # Automatically display the user's input and the assistant's response
+    # Display the latest user message and assistant response
     with st.chat_message("user"):
         st.markdown(user_input)
 
