@@ -20,20 +20,14 @@ llm = ChatOpenAI(model="gpt-4o")
 if "conversation_history" not in st.session_state:
     st.session_state.conversation_history = []
 
-if "saved_conversations" not in st.session_state:
-    st.session_state.saved_conversations = []
-
 # Function to handle input and update the conversation history
 def handle_input(input_text):
     if input_text:
-        if not any(msg[1] == input_text for msg in st.session_state.conversation_history if msg[0] == "user"):
-            st.session_state.conversation_history.append(("user", input_text))
+        st.session_state.conversation_history.append(("user", input_text))
 
         chat_history = [("system", "You are a helpful assistant. Please respond to the questions.")]
         for role, message in st.session_state.conversation_history:
-            if role in ["user", "assistant"]:
-                escaped_message = message.replace("{", "{{").replace("}", "}}")
-                chat_history.append((role, escaped_message))
+            chat_history.append((role, message))
 
         try:
             modified_prompt = ChatPromptTemplate.from_messages(chat_history)
@@ -52,9 +46,8 @@ def get_image_as_base64(image_path):
     with open(image_path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-# Add bot, refresh, export icons
+# Add bot icon
 bot_icon_base64 = get_image_as_base64("./bot.png")
-download_icon_base64 = get_image_as_base64("./export.png")
 
 # Display the header with the bot icon
 st.markdown(
@@ -102,35 +95,28 @@ st.markdown(
     .refresh-button:hover {
         color: #007bff;
     }
-    .chat-input {
-        flex-grow: 1;
-        margin-left: 10px;
-    }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-# Create the refresh button and input box at the bottom
-st.markdown(
-    f"""
-    <div class="chat-footer">
-        <button class="refresh-button" onclick="window.location.reload()">🔄 Refresh</button>
-        <div class="chat-input">
-            {st.chat_input("How can I help you today?")}
+# Footer with refresh button and user input
+with st.container():
+    st.markdown(
+        """
+        <div class="chat-footer">
+            <button class="refresh-button" onclick="window.location.reload()">🔄 Refresh</button>
         </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+        """,
+        unsafe_allow_html=True,
+    )
 
 # Handle user input using st.chat_input
 user_input = st.chat_input("How can I help you today?")
 if user_input:
-    # Process the input to get the assistant's response
     handle_input(user_input)
 
-    # Automatically display the user's input and the assistant's response
+    # Display the latest user message and assistant response
     with st.chat_message("user"):
         st.markdown(user_input)
 
