@@ -115,12 +115,10 @@ for role, message in st.session_state.conversation_history:
     with st.chat_message(role):
         st.markdown(message)
 
-# Show refresh icon above the input box if there's conversation history
+# Show refresh icon at the bottom left if there's conversation history
 if st.session_state.conversation_history:
-    col1, col2 = st.columns([0.9, 0.1])
+    col1, col2 = st.columns([0.1, 0.9])
     with col1:
-        st.caption("Refresh your conversation if needed.")
-    with col2:
         if st.button("🔄", key="refresh_button", help="Refresh"):
             if st.session_state.conversation_history:
                 first_user_message = next(
