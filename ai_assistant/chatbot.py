@@ -66,7 +66,7 @@ bot_icon_base64 = get_image_as_base64("./bot.png")
 refresh_icon_base64 = get_image_as_base64("./refresh.png")
 download_icon_base64 = get_image_as_base64("./export.png")
 
-# Display the header with the refresh icon
+# Display the header with the bot icon
 col1, col2 = st.columns([0.9, 0.1])
 with col1:
     st.markdown(
@@ -78,22 +78,6 @@ with col1:
         """,
         unsafe_allow_html=True,
     )
-with col2:
-    if st.button("🔄", key="refresh_button", help="Refresh"):
-        # Save the current conversation and reset
-        if st.session_state.conversation_history:
-            first_user_message = next(
-                (msg for role, msg in st.session_state.conversation_history if role == "user"),
-                "Conversation",
-            )
-            # Add only the new conversation if it's not already saved
-            if not any(saved_conversation["title"] == first_user_message for saved_conversation in st.session_state.saved_conversations):
-                st.session_state.saved_conversations.append(
-                    {"title": first_user_message, "conversation": st.session_state.conversation_history}
-                )
-            st.session_state.sidebar_expanded = True  # Expand sidebar on new conversation
-        # Clear the current conversation history after saving
-        st.session_state.conversation_history = []
 
 # Dynamically display sidebar content
 if st.session_state.sidebar_expanded:
@@ -140,6 +124,23 @@ if st.session_state.sidebar_expanded:
             # Display the conversation messages below the download button
             for role, message in saved_conversation["conversation"]:
                 st.markdown(f"**{role.capitalize()}**: {message}")
+
+    # Add the refresh icon button below the recent conversations
+    if st.button("🔄", key="refresh_button", help="Refresh"):
+        # Save the current conversation and reset
+        if st.session_state.conversation_history:
+            first_user_message = next(
+                (msg for role, msg in st.session_state.conversation_history if role == "user"),
+                "Conversation",
+            )
+            # Add only the new conversation if it's not already saved
+            if not any(saved_conversation["title"] == first_user_message for saved_conversation in st.session_state.saved_conversations):
+                st.session_state.saved_conversations.append(
+                    {"title": first_user_message, "conversation": st.session_state.conversation_history}
+                )
+            st.session_state.sidebar_expanded = True  # Expand sidebar on new conversation
+        # Clear the current conversation history after saving
+        st.session_state.conversation_history = []
 
 # Caption for the bot
 st.caption("Bot can make mistakes. Review the response prior to use.")
