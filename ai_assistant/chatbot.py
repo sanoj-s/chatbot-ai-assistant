@@ -20,14 +20,20 @@ llm = ChatOpenAI(model="gpt-4o")
 if "conversation_history" not in st.session_state:
     st.session_state.conversation_history = []
 
+if "saved_conversations" not in st.session_state:
+    st.session_state.saved_conversations = []
+
 # Function to handle input and update the conversation history
 def handle_input(input_text):
     if input_text:
-        st.session_state.conversation_history.append(("user", input_text))
+        if not any(msg[1] == input_text for msg in st.session_state.conversation_history if msg[0] == "user"):
+            st.session_state.conversation_history.append(("user", input_text))
 
         chat_history = [("system", "You are a helpful assistant. Please respond to the questions.")]
         for role, message in st.session_state.conversation_history:
-            chat_history.append((role, message))
+            if role in ["user", "assistant"]:
+                escaped_message = message.replace("{", "{{").replace("}", "}}")
+                chat_history.append((role, escaped_message))
 
         try:
             modified_prompt = ChatPromptTemplate.from_messages(chat_history)
@@ -46,7 +52,7 @@ def get_image_as_base64(image_path):
     with open(image_path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-# Add bot icon
+# Add bot, refresh, export icons
 bot_icon_base64 = get_image_as_base64("./bot.png")
 
 # Display the header with the bot icon
@@ -100,23 +106,23 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Footer with refresh button and user input
-with st.container():
-    st.markdown(
-        """
-        <div class="chat-footer">
-            <button class="refresh-button" onclick="window.location.reload()">🔄 Refresh</button>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+# Create the footer layout
+st.markdown(
+    """
+    <div class="chat-footer">
+        <button class="refresh-button" onclick="window.location.reload()">🔄 Refresh</button>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 # Handle user input using st.chat_input
 user_input = st.chat_input("How can I help you today?")
 if user_input:
+    # Process the input to get the assistant's response
     handle_input(user_input)
 
-    # Display the latest user message and assistant response
+    # Automatically display the user's input and the assistant's response
     with st.chat_message("user"):
         st.markdown(user_input)
 
