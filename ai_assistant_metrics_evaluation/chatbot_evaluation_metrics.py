@@ -38,9 +38,12 @@ def evaluate_faithfulness_deepeval(user_input_data_list, retrieval_context_data_
         include_reason=True
     )
 
+    report_folder_path = __get_deepeval_report_path()
+
     # Prepare Excel file
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     file_name = f"FaithfulnessReport_{timestamp}.xlsx"
+    file_path = os.path.join(report_folder_path, file_name)
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = "Results"
@@ -75,8 +78,8 @@ def evaluate_faithfulness_deepeval(user_input_data_list, retrieval_context_data_
             continue
 
     # Save the Excel file
-    workbook.save(file_name)
-    print(f"Report generated: {file_name}")
+    workbook.save(file_path)
+    print(f"Report generated: {file_path}")
 
 
 def evaluate_answer_relevancy_deepeval(user_input_data_list, bot_response_data_list, threshold_value=0.5,
@@ -102,9 +105,12 @@ def evaluate_answer_relevancy_deepeval(user_input_data_list, bot_response_data_l
         include_reason=True
     )
 
+    report_folder_path = __get_deepeval_report_path()
+
     # Prepare Excel file
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     file_name = f"AnswerRelevancyReport_{timestamp}.xlsx"
+    file_path = os.path.join(report_folder_path, file_name)
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = "Results"
@@ -135,8 +141,8 @@ def evaluate_answer_relevancy_deepeval(user_input_data_list, bot_response_data_l
             continue
 
     # Save the Excel file
-    workbook.save(file_name)
-    print(f"Report generated: {file_name}")
+    workbook.save(file_path)
+    print(f"Report generated: {file_path}")
 
 
 def evaluate_summarization_deepeval(user_input_data_list, assessment_questions_data_list, bot_response_data_list,
@@ -163,9 +169,12 @@ def evaluate_summarization_deepeval(user_input_data_list, assessment_questions_d
         include_reason=True
     )
 
+    report_folder_path = __get_deepeval_report_path()
+
     # Prepare Excel file
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     file_name = f"SummarizationReport_{timestamp}.xlsx"
+    file_path = os.path.join(report_folder_path, file_name)
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = "Results"
@@ -200,8 +209,8 @@ def evaluate_summarization_deepeval(user_input_data_list, assessment_questions_d
             continue
 
     # Save the Excel file
-    workbook.save(file_name)
-    print(f"Report generated: {file_name}")
+    workbook.save(file_path)
+    print(f"Report generated: {file_path}")
 
 
 def evaluate_hallucination_deepeval(user_input_data_list, context_data_list, bot_response_data_list,
@@ -228,9 +237,12 @@ def evaluate_hallucination_deepeval(user_input_data_list, context_data_list, bot
         include_reason=True
     )
 
+    report_folder_path = __get_deepeval_report_path()
+
     # Prepare Excel file
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     file_name = f"HallucinationReport_{timestamp}.xlsx"
+    file_path = os.path.join(report_folder_path, file_name)
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = "Results"
@@ -266,8 +278,8 @@ def evaluate_hallucination_deepeval(user_input_data_list, context_data_list, bot
             continue
 
     # Save the Excel file
-    workbook.save(file_name)
-    print(f"Report generated: {file_name}")
+    workbook.save(file_path)
+    print(f"Report generated: {file_path}")
 
 
 def evaluate_contextual_relevancy_deepeval(user_input_data_list, retrieval_context_data_list, bot_response_data_list,
@@ -294,9 +306,12 @@ def evaluate_contextual_relevancy_deepeval(user_input_data_list, retrieval_conte
         include_reason=True
     )
 
+    report_folder_path = __get_deepeval_report_path()
+
     # Prepare Excel file
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     file_name = f"ContextualRelevancyReport_{timestamp}.xlsx"
+    file_path = os.path.join(report_folder_path, file_name)
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = "Results"
@@ -334,8 +349,8 @@ def evaluate_contextual_relevancy_deepeval(user_input_data_list, retrieval_conte
             continue
 
     # Save the Excel file
-    workbook.save(file_name)
-    print(f"Report generated: {file_name}")
+    workbook.save(file_path)
+    print(f"Report generated: {file_path}")
 
 
 def evaluate_contextual_recall_deepeval(user_input_data_list, retrieval_context_data_list, bot_response_data_list,
@@ -364,9 +379,12 @@ def evaluate_contextual_recall_deepeval(user_input_data_list, retrieval_context_
         include_reason=True
     )
 
+    report_folder_path = __get_deepeval_report_path()
+
     # Prepare Excel file
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     file_name = f"ContextualRecallReport_{timestamp}.xlsx"
+    file_path = os.path.join(report_folder_path, file_name)
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = "Results"
@@ -407,8 +425,8 @@ def evaluate_contextual_recall_deepeval(user_input_data_list, retrieval_context_
             continue
 
     # Save the Excel file
-    workbook.save(file_name)
-    print(f"Report generated: {file_name}")
+    workbook.save(file_path)
+    print(f"Report generated: {file_path}")
 
 
 def evaluate_contextual_precision_deepeval(user_input_data_list, retrieval_context_data_list, bot_response_data_list,
@@ -437,9 +455,12 @@ def evaluate_contextual_precision_deepeval(user_input_data_list, retrieval_conte
         include_reason=True
     )
 
+    report_folder_path = __get_deepeval_report_path()
+
     # Prepare Excel file
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     file_name = f"ContextualPrecisionReport_{timestamp}.xlsx"
+    file_path = os.path.join(report_folder_path, file_name)
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = "Results"
@@ -481,8 +502,8 @@ def evaluate_contextual_precision_deepeval(user_input_data_list, retrieval_conte
             continue
 
     # Save the Excel file
-    workbook.save(file_name)
-    print(f"Report generated: {file_name}")
+    workbook.save(file_path)
+    print(f"Report generated: {file_path}")
 
 
 def evaluate_bias_deepeval(user_input_data_list, bot_response_data_list, threshold_value=0.5, model_value="gpt-4"):
@@ -507,9 +528,12 @@ def evaluate_bias_deepeval(user_input_data_list, bot_response_data_list, thresho
         include_reason=True
     )
 
+    report_folder_path = __get_deepeval_report_path()
+
     # Prepare Excel file
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     file_name = f"BiasEvaluationReport_{timestamp}.xlsx"
+    file_path = os.path.join(report_folder_path, file_name)
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = "Results"
@@ -540,8 +564,8 @@ def evaluate_bias_deepeval(user_input_data_list, bot_response_data_list, thresho
             continue
 
     # Save the Excel file
-    workbook.save(file_name)
-    print(f"Report generated: {file_name}")
+    workbook.save(file_path)
+    print(f"Report generated: {file_path}")
 
 
 def evaluate_toxicity_deepeval(user_input_data_list, bot_response_data_list, threshold_value=0.5, model_value="gpt-4"):
@@ -566,9 +590,12 @@ def evaluate_toxicity_deepeval(user_input_data_list, bot_response_data_list, thr
         include_reason=True
     )
 
+    report_folder_path = __get_deepeval_report_path()
+
     # Prepare Excel file
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     file_name = f"ToxicityEvaluationReport_{timestamp}.xlsx"
+    file_path = os.path.join(report_folder_path, file_name)
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = "Results"
@@ -599,8 +626,8 @@ def evaluate_toxicity_deepeval(user_input_data_list, bot_response_data_list, thr
             continue
 
     # Save the Excel file
-    workbook.save(file_name)
-    print(f"Report generated: {file_name}")
+    workbook.save(file_path)
+    print(f"Report generated: {file_path}")
 
 
 def evaluate_ragas_answer_relevancy_metrics_deepeval(user_input_data_list, retrieval_context_data_list,
@@ -630,9 +657,12 @@ def evaluate_ragas_answer_relevancy_metrics_deepeval(user_input_data_list, retri
         model=model_value
     )
 
+    report_folder_path = __get_deepeval_report_path()
+
     # Prepare Excel file
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     file_name = f"RAGASAnswerRelevancyReport_{timestamp}.xlsx"
+    file_path = os.path.join(report_folder_path, file_name)
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = "Results"
@@ -673,8 +703,8 @@ def evaluate_ragas_answer_relevancy_metrics_deepeval(user_input_data_list, retri
             continue
 
     # Save the Excel file
-    workbook.save(file_name)
-    print(f"Report generated: {file_name}")
+    workbook.save(file_path)
+    print(f"Report generated: {file_path}")
 
 
 def evaluate_ragas_faithfulness_metrics_deepeval(user_input_data_list, retrieval_context_data_list,
@@ -703,9 +733,12 @@ def evaluate_ragas_faithfulness_metrics_deepeval(user_input_data_list, retrieval
         model=model_value
     )
 
+    report_folder_path = __get_deepeval_report_path()
+
     # Prepare Excel file
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     file_name = f"RAGASFaithfulnessReport_{timestamp}.xlsx"
+    file_path = os.path.join(report_folder_path, file_name)
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = "Results"
@@ -746,8 +779,8 @@ def evaluate_ragas_faithfulness_metrics_deepeval(user_input_data_list, retrieval
             continue
 
     # Save the Excel file
-    workbook.save(file_name)
-    print(f"Report generated: {file_name}")
+    workbook.save(file_path)
+    print(f"Report generated: {file_path}")
 
 
 def evaluate_ragas_contextual_recall_metrics_deepeval(user_input_data_list, retrieval_context_data_list,
@@ -777,9 +810,12 @@ def evaluate_ragas_contextual_recall_metrics_deepeval(user_input_data_list, retr
         model=model_value
     )
 
+    report_folder_path = __get_deepeval_report_path()
+
     # Prepare Excel file
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     file_name = f"RAGASContextualRecallReport_{timestamp}.xlsx"
+    file_path = os.path.join(report_folder_path, file_name)
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = "Results"
@@ -821,8 +857,8 @@ def evaluate_ragas_contextual_recall_metrics_deepeval(user_input_data_list, retr
             continue
 
     # Save the Excel file
-    workbook.save(file_name)
-    print(f"Report generated: {file_name}")
+    workbook.save(file_path)
+    print(f"Report generated: {file_path}")
 
 
 def evaluate_ragas_contextual_precision_metrics_deepeval(user_input_data_list, retrieval_context_data_list,
@@ -852,9 +888,12 @@ def evaluate_ragas_contextual_precision_metrics_deepeval(user_input_data_list, r
         model=model_value
     )
 
+    report_folder_path = __get_deepeval_report_path()
+
     # Prepare Excel file
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     file_name = f"RAGASContextualPrecisionReport_{timestamp}.xlsx"
+    file_path = os.path.join(report_folder_path, file_name)
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = "Results"
@@ -896,8 +935,8 @@ def evaluate_ragas_contextual_precision_metrics_deepeval(user_input_data_list, r
             continue
 
     # Save the Excel file
-    workbook.save(file_name)
-    print(f"Report generated: {file_name}")
+    workbook.save(file_path)
+    print(f"Report generated: {file_path}")
 
 
 def evaluate_metrics_using_g_eval_deepeval(metric_name, criteria_details, user_input_data_list, bot_response_data_list,
@@ -917,9 +956,12 @@ def evaluate_metrics_using_g_eval_deepeval(metric_name, criteria_details, user_i
     if not (len(user_input_data_list) == len(bot_response_data_list) == len(expected_output_data_list)):
         raise ValueError("All input lists must have the same length.")
 
+    report_folder_path = __get_deepeval_report_path()
+
     # Prepare Excel file
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     file_name = f"G-Eval_Metrics_Report_{timestamp}.xlsx"
+    file_path = os.path.join(report_folder_path, file_name)
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = "Results"
@@ -967,8 +1009,8 @@ def evaluate_metrics_using_g_eval_deepeval(metric_name, criteria_details, user_i
             continue
 
     # Save the Excel file
-    workbook.save(file_name)
-    print(f"Report generated: {file_name}")
+    workbook.save(file_path)
+    print(f"Report generated: {file_path}")
 
 
 def evaluate_all_metrics_deepeval(user_input_data_list, retrieval_context_data_list, bot_response_data_list,
@@ -1013,9 +1055,12 @@ def evaluate_all_metrics_deepeval(user_input_data_list, retrieval_context_data_l
             expected_output_data_list)):
         raise ValueError("All input lists must have the same length.")
 
+    report_folder_path = __get_deepeval_report_path()
+
     # Prepare Excel file
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     file_name = f"AllMetricsReport_{timestamp}.xlsx"
+    file_path = os.path.join(report_folder_path, file_name)
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = "Metrics Results"
@@ -1062,8 +1107,8 @@ def evaluate_all_metrics_deepeval(user_input_data_list, retrieval_context_data_l
         sheet.append(results_row)
 
     # Save the Excel file
-    workbook.save(file_name)
-    print(f"Consolidated Metrics report generated: {file_name}")
+    workbook.save(file_path)
+    print(f"Consolidated Metrics report generated: {file_path}")
 
 
 def evaluate_all_metrics_ragas(data_samples):
@@ -1220,6 +1265,19 @@ def __generate_report(df, file_name):
     :param file_name:
     :return:
     """
-    report_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'Reports')
+    report_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'reports_ragas')
     os.makedirs(report_dir, exist_ok=True)
     df.to_excel(os.path.join(report_dir, file_name), index=False)
+
+
+def __get_deepeval_report_path():
+    """
+    Get the path of the DeepEval report folder
+    @Author: Sanoj Swaminathan
+    @Date: 09-12-2024
+    :return:
+    """
+    report_folder = os.path.join(os.getcwd(), "../reports_deepeval")
+    if not os.path.exists(report_folder):
+        os.makedirs(report_folder)
+    return report_folder
