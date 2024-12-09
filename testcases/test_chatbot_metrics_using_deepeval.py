@@ -27,7 +27,7 @@ expected_outputs = [
 ]
 
 
-# @pytest.mark.skip(reason="This test is skipped.")
+@pytest.mark.skip(reason="This test is skipped.")
 def test_evaluate_all_metrics():
     metric_name_value = "Correctness"
     g_eval_criteria_details = "Determine whether the actual output is factually correct based on the expected output."

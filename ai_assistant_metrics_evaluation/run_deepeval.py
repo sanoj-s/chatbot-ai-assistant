@@ -3,7 +3,7 @@ import sys
 
 
 def main():
-    command = ["deepeval", "test", "run", "test_chatbot_metrics_using_deepeval.py"]
+    command = ["deepeval", "test", "run", "../testcases/test_chatbot_metrics_using_deepeval.py"]
     try:
         result = subprocess.run(
             command,
