@@ -1,5 +1,8 @@
+import configparser
 import os
 from datetime import datetime
+
+import deepeval
 from deepeval import assert_test
 from deepeval.metrics import FaithfulnessMetric, AnswerRelevancyMetric, SummarizationMetric, HallucinationMetric, \
     ContextualRelevancyMetric, ContextualRecallMetric, ContextualPrecisionMetric, BiasMetric, ToxicityMetric, GEval
@@ -1015,7 +1018,7 @@ def evaluate_metrics_using_g_eval_deepeval(metric_name, criteria_details, user_i
 
 def evaluate_all_metrics_deepeval(user_input_data_list, retrieval_context_data_list, bot_response_data_list,
                                   expected_output_data_list, metric_name, criteria_details,
-                                  threshold_value=0.7, model_value="gpt-4"):
+                                  threshold_value=0.9, model_value="gpt-4"):
     """
     Evaluate all metrics based on the given user's input, bot's response, context, and ground truth,
     and generate an Excel report with the results for multiple test cases.
@@ -1032,6 +1035,7 @@ def evaluate_all_metrics_deepeval(user_input_data_list, retrieval_context_data_l
     :return:
     """
     # Initialize all metrics
+    global metric
     metrics = [
         FaithfulnessMetric(threshold=threshold_value, model=model_value, include_reason=True),
         AnswerRelevancyMetric(threshold=threshold_value, model=model_value, include_reason=True),
@@ -1049,6 +1053,8 @@ def evaluate_all_metrics_deepeval(user_input_data_list, retrieval_context_data_l
                                                                               LLMTestCaseParams.ACTUAL_OUTPUT,
                                                                               LLMTestCaseParams.EXPECTED_OUTPUT])
     ]
+
+    excluded_metrics = {"HallucinationMetric", "BiasMetric", "ToxicityMetric"}
 
     # Validate input lengths
     if not (len(user_input_data_list) == len(retrieval_context_data_list) == len(bot_response_data_list) == len(
@@ -1069,6 +1075,7 @@ def evaluate_all_metrics_deepeval(user_input_data_list, retrieval_context_data_l
     header = ["User Input", "Context", "Bot Response", "Expected Output"]
     for metric in metrics:
         header.append(f"{metric.__class__.__name__} Score")
+    header.append("Overall Rating")
     sheet.append(header)
 
     # Iterate over test cases
@@ -1091,20 +1098,59 @@ def evaluate_all_metrics_deepeval(user_input_data_list, retrieval_context_data_l
 
         # Collect results for this test case
         results_row = [user_input, context_str, bot_response, expected_output]
+        metric_scores = []
         for metric in metrics:
             try:
                 metric.measure(test_case)
                 results_row.append(metric.score)
 
+                # Include only metrics not in the excluded list for average calculation
+                if metric.__class__.__name__ not in excluded_metrics:
+                    metric_scores.append(metric.score)
+
                 # Assert the metric
                 assert_test(test_case, [metric])
             except AssertionError:
-                # Handle failed assertions
                 print(f"Assertion failed for {metric.__class__.__name__} on test case.")
                 continue
 
-        # Append the results row to the sheet
+        # Calculate the average score and determine the rating
+        average_score = sum(metric_scores) / len(metric_scores) if metric_scores else 0
+        if average_score >= 0.9:
+            rating = 5
+        elif 0.7 < average_score < 0.9:
+            rating = 3
+        elif 0.5 < average_score <= 0.7:
+            rating = 2
+        else:
+            rating = 1
+
+        results_row.append(rating)
         sheet.append(results_row)
+
+        # Read the config.ini file and fetch the value of NEED_TO_SEND_FEEDBACK_TO_CONFIDENT_AI
+        try:
+            config = configparser.ConfigParser()
+            config.read('../config.ini')
+            need_to_send_feedback = config.getboolean('OTHER_CONFIG', 'NEED_TO_SEND_FEEDBACK_TO_CONFIDENT_AI')
+            confident_api_key_value = config.get('OTHER_CONFIG', 'CONFIDENT_API_KEY')
+            if need_to_send_feedback:
+                deepeval.login_with_confident_api_key(confident_api_key_value)
+                response_id = deepeval.monitor(
+                    event_name="Chatbot",
+                    model=model_value,
+                    input=user_input,
+                    response=bot_response
+                )
+                deepeval.send_feedback(
+                    response_id=response_id,
+                    rating=rating,
+                    explanation=metric.reason if metric.reason else "No explanation provided.",
+                    expected_response=expected_output
+                )
+        except Exception as e:
+            print(e)
+            continue
 
     # Save the Excel file
     workbook.save(file_path)
@@ -1125,6 +1171,9 @@ def evaluate_all_metrics_ragas(data_samples):
                      metrics=[context_precision, context_recall, context_entity_recall, faithfulness, answer_relevancy,
                               answer_correctness, answer_similarity])
     df = score.to_pandas()
+    numeric_columns = df.columns[4:]
+    df['Average Score'] = df[numeric_columns].mean(axis=1)
+    df['Overall Rating'] = df['Average Score'].apply(__calculate_rating_for_ragas)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     file_name = f"AllMetricsReport_{timestamp}.xlsx"
     __generate_report(df, file_name)
@@ -1281,3 +1330,21 @@ def __get_deepeval_report_path():
     if not os.path.exists(report_folder):
         os.makedirs(report_folder)
     return report_folder
+
+
+def __calculate_rating_for_ragas(average_score):
+    """
+    Calculate the rating based on the average score
+    @Author: Sanoj Swaminathan
+    @Date: 10-12-2024
+    :param average_score:
+    :return:
+    """
+    if average_score >= 0.9:
+        return 5
+    elif 0.7 < average_score < 0.9:
+        return 3
+    elif 0.5 < average_score <= 0.7:
+        return 2
+    else:
+        return 1
