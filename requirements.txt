@@ -1,8 +1,8 @@
-streamlit~=1.40.1
+streamlit~=1.41.1
 langchain
 langchain_openai
 xlsxwriter
-ragas~=0.2.6
+ragas~=0.2.9
 nltk
 unstructured
 RapidFuzz
@@ -13,6 +13,6 @@ python-pptx
 
 pandas~=2.2.3
 datasets~=3.1.0
-deepeval~=2.0.1
+deepeval~=2.1.1
 pytest~=8.3.2
 newrelic~=10.4.0
