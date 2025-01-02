@@ -8,6 +8,7 @@ from langchain_community.document_loaders import (
     UnstructuredPowerPointLoader,
     UnstructuredHTMLLoader,
     UnstructuredCSVLoader,
+    PyPDFLoader,
 )
 from ragas.testset import TestsetGenerator
 from ragas.llms import LangchainLLMWrapper
@@ -85,8 +86,8 @@ if input_method == "Enter URL":
 
 elif input_method == "Upload Files":
     uploaded_files = st.file_uploader(
-        "Upload files (docx, xlsx, pptx, csv, html):", 
-        type=["docx", "xlsx", "pptx", "csv", "html"], 
+        "Upload files (docx, xlsx, pptx, pdf, csv, html):", 
+        type=["docx", "xlsx", "pptx", "pdf", "csv", "html"], 
         accept_multiple_files=True
     )
 
@@ -113,6 +114,8 @@ elif input_method == "Upload Files":
                         loader = UnstructuredExcelLoader(temp_file_path)
                     elif file_extension == "pptx":
                         loader = UnstructuredPowerPointLoader(temp_file_path)
+                    elif file_extension == "pdf":
+                        loader = PyPDFLoader(temp_file_path)
                     elif file_extension == "csv":
                         loader = UnstructuredCSVLoader(temp_file_path)
                     elif file_extension == "html":
