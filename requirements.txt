@@ -10,9 +10,8 @@ python-docx
 networkx
 openpyxl
 python-pptx
-
 pandas~=2.2.3
 datasets~=3.1.0
 deepeval~=2.1.1
 pytest~=8.3.2
-newrelic~=10.4.0
+Flask~=3.1.0
