@@ -24,14 +24,8 @@ os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 os.environ["GEMINI_API_KEY"] = st.secrets["GEMINI_API_KEY"]
 
 # Initialize Ragas components
-#generator_llm = LangchainLLMWrapper(ChatOpenAI(model="gpt-4o"))
-#generator_embeddings = LangchainEmbeddingsWrapper(OpenAIEmbeddings())
-api_key = os.getenv("GEMINI_API_KEY")
-generator_llm = LangchainLLMWrapper(ChatGoogleGenerativeAI(model='gemini-2.0-flash-exp', api_key=SecretStr(api_key)))
-generator_embeddings = LangchainEmbeddingsWrapper(GoogleGenerativeAIEmbeddings(
-    model="gemini-2.0-flash-exp"
-))
-generator = TestsetGenerator(llm=generator_llm, embedding_model=generator_embeddings)
+generator_llm = LangchainLLMWrapper(ChatOpenAI(model="gpt-4o"))
+generator_embeddings = LangchainEmbeddingsWrapper(OpenAIEmbeddings())
 
 # Streamlit UI
 st.logo("./bot.png")
