@@ -14,13 +14,25 @@ from ragas.testset import TestsetGenerator
 from ragas.llms import LangchainLLMWrapper
 from ragas.embeddings import LangchainEmbeddingsWrapper
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from ragas.embeddings import LangchainEmbeddingsWrapper
 
 # Set OpenAI API Key
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+os.environ["GEMINI_API_KEY"] = st.secrets["GEMINI_API_KEY"]
 
 # Initialize Ragas components
-generator_llm = LangchainLLMWrapper(ChatOpenAI(model="gpt-4o"))
-generator_embeddings = LangchainEmbeddingsWrapper(OpenAIEmbeddings())
+#generator_llm = LangchainLLMWrapper(ChatOpenAI(model="gpt-4o"))
+#generator_embeddings = LangchainEmbeddingsWrapper(OpenAIEmbeddings())
+generator_llm = LangchainLLMWrapper(ChatGoogleGenerativeAI(
+    model="gemini-2.0-flash-exp",
+    temperature=0.4,
+    max_tokens=None,
+    top_p=0.8,
+))
+generator_embeddings = LangchainEmbeddingsWrapper(GoogleGenerativeAIEmbeddings(
+    model="gemini-2.0-flash-exp"
+))
 generator = TestsetGenerator(llm=generator_llm, embedding_model=generator_embeddings)
 
 # Streamlit UI
