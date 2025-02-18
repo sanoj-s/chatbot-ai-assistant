@@ -17,6 +17,7 @@ from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from ragas.embeddings import LangchainEmbeddingsWrapper
 from langchain_google_genai import ChatGoogleGenerativeAI
+from pydantic import SecretStr
 
 # Set OpenAI API Key
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
