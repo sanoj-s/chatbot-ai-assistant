@@ -26,6 +26,7 @@ os.environ["GEMINI_API_KEY"] = st.secrets["GEMINI_API_KEY"]
 # Initialize Ragas components
 generator_llm = LangchainLLMWrapper(ChatOpenAI(model="gpt-4o"))
 generator_embeddings = LangchainEmbeddingsWrapper(OpenAIEmbeddings())
+generator = TestsetGenerator(llm=generator_llm, embedding_model=generator_embeddings)
 
 # Streamlit UI
 st.logo("./bot.png")
