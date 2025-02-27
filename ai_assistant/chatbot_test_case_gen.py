@@ -17,7 +17,7 @@ st.title("Generate Your Manual Test Cases...")
 st.caption("Bot can make mistakes. Review the response before using.")
 
 # Initialize the model
-llm = ChatOpenAI(model="gpt-4o")
+llm = ChatOpenAI(model="gpt-3.5-turbo")
 
 # Initialize session state
 if "conversation_history" not in st.session_state:
