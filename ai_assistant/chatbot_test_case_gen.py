@@ -10,7 +10,11 @@ os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 # Define the chat prompt template
 prompt = ChatPromptTemplate.from_messages(
     [
-        ("system", "You are a manual software tester. Please review the given requirements carefully and write detailed manual test cases. Each test case should include the following details: Test Case ID, Test Case Title, Pre-conditions, Test Steps, Expected Result, and Post-conditions (if any). Ensure that the test cases cover positive, negative, boundary, and edge scenarios where applicable."),
+        ("system", "You are a manual software tester. Please review the given requirements carefully and write "
+                   "detailed manual test cases. Each test case should include the following details: Test Case ID, "
+                   "Test Case Title, Pre-conditions, Test Steps, Expected Result, and Post-conditions (if any). "
+                   "Ensure that the test cases cover positive, negative, boundary, and edge scenarios where "
+                   "applicable."),
     ]
 )
 
