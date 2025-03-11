@@ -1,7 +1,7 @@
 import psycopg2
 
 # AWS RDS PostgreSQL Connection Details
-DB_HOST = "afta-ai-agent-db-instance-1.ctyc8muwyysc.ap-southeast-2.rds.amazonaws.com"
+DB_HOST = "afta-ai-agent-db.cluster-ctyc8muwyysc.ap-southeast-2.rds.amazonaws.com"
 DB_PORT = "5432"
 DB_USER = "postgres_admin"
 DB_PASSWORD = "Super_admin_2025!"
