@@ -9,7 +9,7 @@ from langchain_openai import ChatOpenAI
 from openpyxl import load_workbook
 
 # Set up OpenAI API key
-os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+#os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 
 # Define the chat prompt template
 st.logo("./bot.png")
