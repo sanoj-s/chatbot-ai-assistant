@@ -17,7 +17,7 @@ try:
     conn = psycopg2.connect(
     dbname="afta-ai-agent-db",
     user="postgres_admin",
-    password="your_password",
+    password=DB_PASSWORD,
     host=DB_HOST,
     port="5432"
 )
