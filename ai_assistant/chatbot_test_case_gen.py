@@ -12,7 +12,7 @@ from openpyxl import load_workbook
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 
 # Define the chat prompt template
-st.logo("./bot.png")
+# st.logo("./bot.png")
 st.title("Generate Your Manual Test Cases...")
 st.caption("Bot can make mistakes. Review the response before using.")
 
