@@ -7,12 +7,20 @@ DB_USER = "postgres_admin"
 DB_PASSWORD = "Super_admin_2025!"
 
 try:
+    # conn = psycopg2.connect(
+    #     host=DB_HOST,
+    #     port=DB_PORT,
+    #     user=DB_USER,
+    #     password=DB_PASSWORD
+    # )
+
     conn = psycopg2.connect(
-        host=DB_HOST,
-        port=DB_PORT,
-        user=DB_USER,
-        password=DB_PASSWORD
-    )
+    dbname="afta-ai-agent-db",
+    user="postgres_admin",
+    password="your_password",
+    host=DB_HOST,
+    port="5432"
+)
 
     conn.autocommit = True
     cursor = conn.cursor()
