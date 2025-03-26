@@ -135,7 +135,7 @@ def handle_input(input_text, uploaded_file):
 
 
 # User Input & File Upload
-user_input = st.chat_input("Describe requirement here")
+user_input = st.chat_input(placeholder="Describe requirement here", accept_file=True, file_type=None)
 uploaded_file = st.file_uploader("Upload the requirement file", type=["docx", "pdf", "txt", "csv", "xlsx"])
 
 # Process input or file
